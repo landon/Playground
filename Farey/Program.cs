@@ -12,8 +12,8 @@ namespace Farey
 
         static void Main(string[] args)
         {
-            var o = 3.5901639344262293;
-            var result = "a:0.07923497267759617,b:0.07103825136612035,c:0.07103825136612034,d:0.0683060109289617,f:0.0327868852459018,g:0.030054644808743147,q:0.027322404371584872,s:0.010928961748633855";
+            var o = 3.591240875912409;
+            var result = "a:0.06569343065693425,b:0.06569343065693427,c:0.058394160583941444,d:0.058394160583941444,f:0.05109489051094884,g:0.029197080291970764,h:0.02919708029197072,k:0.021897810218978107,s:0.007299270072992715";
             
             var r = Parse(result);
             var m = MaxBase(r);
@@ -21,7 +21,7 @@ namespace Farey
             foreach (var x in r)
             {
                 var t = Normalize(Farey(x.Value, Fairy), m);
-                Console.WriteLine(x.Key + ": " + t.Item1 + " / " + t.Item2);
+                Console.WriteLine(x.Key + ": " + t.Item1);
             }
 
             var obj = Normalize(Reverse(Farey(1.0 / o, Fairy)), m);
