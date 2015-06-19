@@ -1,0 +1,2 @@
+simulating the brain's hardware in software to replay stored memories (like software opengl rendering)
+how many simulations of simulations can you run down a stack?
