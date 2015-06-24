@@ -40,12 +40,12 @@ namespace Fixability
             Assignments = _assignmentGenerator.Generate(sizes, minPot, maxPot);
            
             DoStaticAnalysis();
-            DoDynamicAnalysis();
+            var remainingAssignments = DoDynamicAnalysis();
 
             return AnalysisResult.NotFixable;
         }
 
-        void DoDynamicAnalysis()
+        List<IAssignment> DoDynamicAnalysis()
         {
             var targetAssignments = new HashSet<IAssignment>(ColorableAssignments);
             var remainingAssignments = NonColorableAssignments.ToList();
@@ -70,6 +70,8 @@ namespace Fixability
                 foreach (var assignment in wonAssignments)
                     targetAssignments.Add(assignment);
             }
+
+            return remainingAssignments;
         }
 
         void DoStaticAnalysis()
