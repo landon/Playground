@@ -6,23 +6,23 @@ using System.Threading.Tasks;
 
 namespace Fixability
 {
-    public class Mind<TList, TGraph>
-        where TGraph : IGraph<TList>, new()
+    public class Mind<TColorSet, TVertexSet, TGraph>
+        where TGraph : IGraph<TColorSet, TVertexSet>, new()
     {
-        IGraph<TList> _graph;
-        IGraph<TList> _lineGraph;
+        IGraph<TColorSet, TVertexSet> _graph;
+        IGraph<TColorSet, TVertexSet> _lineGraph;
         List<Tuple<int, int>> _edges;
-        IDynamicAnalyzer<TList> _dynamicAnalyzer;
-        IStaticAnalyzer<TList> _staticAnalyzer;
-        IAssignmentGenerator<TList> _assignmentGenerator;
+        DynamicAnalyzer<TColorSet, TVertexSet> _dynamicAnalyzer;
+        StaticAnalyzer<TColorSet, TVertexSet> _staticAnalyzer;
+        IAssignmentGenerator<TColorSet, TVertexSet> _assignmentGenerator;
 
-        public List<IAssignment<TList>> Assignments { get; private set; }
-        public List<IAssignment<TList>> ColorableAssignments { get; private set; }
-        public List<IAssignment<TList>> NearlyColorableAssignments { get; private set; }
-        public List<IAssignment<TList>> NonColorableAssignments { get; private set; }
-        public List<IAssignment<TList>> NonSuperabundantAssignments { get; private set; }
+        public List<IAssignment<TColorSet, TVertexSet>> Assignments { get; private set; }
+        public List<IAssignment<TColorSet, TVertexSet>> ColorableAssignments { get; private set; }
+        public List<IAssignment<TColorSet, TVertexSet>> NearlyColorableAssignments { get; private set; }
+        public List<IAssignment<TColorSet, TVertexSet>> NonColorableAssignments { get; private set; }
+        public List<IAssignment<TColorSet, TVertexSet>> NonSuperabundantAssignments { get; private set; }
 
-        public Mind(TGraph graph, IDynamicAnalyzer<TList> dynamicAnalyzer, IStaticAnalyzer<TList> staticAnalyzer, IAssignmentGenerator<TList> assignmentGenerator)
+        public Mind(TGraph graph, DynamicAnalyzer<TColorSet, TVertexSet> dynamicAnalyzer, StaticAnalyzer<TColorSet, TVertexSet> staticAnalyzer, IAssignmentGenerator<TColorSet, TVertexSet> assignmentGenerator)
         {
             _graph = graph;
             _dynamicAnalyzer = dynamicAnalyzer;
@@ -62,14 +62,14 @@ namespace Fixability
             return result;
         }
 
-        List<IAssignment<TList>> DoDynamicAnalysis()
+        List<IAssignment<TColorSet, TVertexSet>> DoDynamicAnalysis()
         {
-            var targetAssignments = new HashSet<IAssignment<TList>>(ColorableAssignments);
+            var targetAssignments = new HashSet<IAssignment<TColorSet, TVertexSet>>(ColorableAssignments);
             var remainingAssignments = NonColorableAssignments.ToList();
 
             while (true)
             {
-                var wonAssignments = new List<IAssignment<TList>>();
+                var wonAssignments = new List<IAssignment<TColorSet, TVertexSet>>();
 
                 for (int i = remainingAssignments.Count - 1; i >= 0; i--)
                 {
@@ -93,10 +93,10 @@ namespace Fixability
 
         void DoStaticAnalysis()
         {
-            ColorableAssignments = new List<IAssignment<TList>>();
-            NonColorableAssignments = new List<IAssignment<TList>>();
-            NonSuperabundantAssignments = new List<IAssignment<TList>>();
-            NearlyColorableAssignments = new List<IAssignment<TList>>();
+            ColorableAssignments = new List<IAssignment<TColorSet, TVertexSet>>();
+            NonColorableAssignments = new List<IAssignment<TColorSet, TVertexSet>>();
+            NonSuperabundantAssignments = new List<IAssignment<TColorSet, TVertexSet>>();
+            NearlyColorableAssignments = new List<IAssignment<TColorSet, TVertexSet>>();
 
             foreach (var assignment in Assignments)
             {

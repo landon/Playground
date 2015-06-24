@@ -6,9 +6,29 @@ using System.Threading.Tasks;
 
 namespace Fixability.Basic
 {
-    public class Assignment<TList> : IAssignment<TList>
+    public class Assignment<TColorSet, TVertexSet> : IAssignment<TColorSet, TVertexSet>
     {
-        public TList CommonColors(int v, int w)
+        public TColorSet CommonColors(int v, int w)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int Psi(TVertexSet set)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int ColorCount
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        public TVertexSet GetSwappable(int alpha, int beta)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IAssignment<TColorSet, TVertexSet> PerformSwap(int alpha, int beta, TVertexSet swapVertices)
         {
             throw new NotImplementedException();
         }
