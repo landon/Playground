@@ -5,10 +5,11 @@ using System.Text;
 
 namespace Fixability
 {
-    public interface IStaticAnalyzer
+    public interface IStaticAnalyzer<TList>
     {
-        bool IsColorable(IAssignment assignment);
-        bool IsSuperabundant(IAssignment assignment);
-        bool IsNearlyColorable(IAssignment assignment);
+        bool IsEdgeColorable(IAssignment<TList> assignment);
+        bool IsSuperabundant(IAssignment<TList> assignment);
+        bool IsNearlyEdgeColorable(IAssignment<TList> assignment);
+        void Initialize(IGraph<TList> graph, IGraph<TList> lineGraph, List<Tuple<int, int>> edges);
     }
 }

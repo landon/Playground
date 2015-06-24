@@ -5,8 +5,8 @@ using System.Text;
 
 namespace Fixability
 {
-    public interface IAssignmentGenerator
+    public interface IAssignmentGenerator<TList>
     {
-        List<IAssignment> Generate(int[] sizes, int minPot, int maxPot);
+        List<IAssignment<TList>> Generate(int[] sizes, int minPot, int maxPot);
     }
 }

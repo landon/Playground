@@ -6,27 +6,33 @@ using System.Threading.Tasks;
 
 namespace Fixability
 {
-    public class Mind
+    public class Mind<TList, TGraph>
+        where TGraph : IGraph<TList>, new()
     {
-        IGraph _graph;
-        IDynamicAnalyzer _dynamicAnalyzer;
-        IStaticAnalyzer _staticAnalyzer;
-        IAssignmentGenerator _assignmentGenerator;
-        IListHelper _listHelper;
+        IGraph<TList> _graph;
+        IGraph<TList> _lineGraph;
+        List<Tuple<int, int>> _edges;
+        IDynamicAnalyzer<TList> _dynamicAnalyzer;
+        IStaticAnalyzer<TList> _staticAnalyzer;
+        IAssignmentGenerator<TList> _assignmentGenerator;
 
-        public List<IAssignment> Assignments { get; private set; }
-        public List<IAssignment> ColorableAssignments { get; private set; }
-        public List<IAssignment> NearlyColorableAssignments { get; private set; }
-        public List<IAssignment> NonColorableAssignments { get; private set; }
-        public List<IAssignment> NonSuperabundantAssignments { get; private set; }
+        public List<IAssignment<TList>> Assignments { get; private set; }
+        public List<IAssignment<TList>> ColorableAssignments { get; private set; }
+        public List<IAssignment<TList>> NearlyColorableAssignments { get; private set; }
+        public List<IAssignment<TList>> NonColorableAssignments { get; private set; }
+        public List<IAssignment<TList>> NonSuperabundantAssignments { get; private set; }
 
-        public Mind(IGraph graph, IDynamicAnalyzer dynamicAnalyzer, IStaticAnalyzer staticAnalyzer, IAssignmentGenerator assignmentGenerator, IListHelper listHelper)
+        public Mind(TGraph graph, IDynamicAnalyzer<TList> dynamicAnalyzer, IStaticAnalyzer<TList> staticAnalyzer, IAssignmentGenerator<TList> assignmentGenerator)
         {
             _graph = graph;
             _dynamicAnalyzer = dynamicAnalyzer;
             _staticAnalyzer = staticAnalyzer;
             _assignmentGenerator = assignmentGenerator;
-            _listHelper = listHelper;
+
+            BuildLineGraph();
+
+            _dynamicAnalyzer.Initialize(_graph, _lineGraph, _edges);
+            _staticAnalyzer.Initialize(_graph, _lineGraph, _edges);
         }
 
         public AnalysisResult Analyze(int[] sizes, int maxPot = int.MaxValue)
@@ -42,17 +48,28 @@ namespace Fixability
             DoStaticAnalysis();
             var remainingAssignments = DoDynamicAnalysis();
 
-            return AnalysisResult.NotFixable;
+            if (remainingAssignments.Count <= 0)
+                return AnalysisResult.FixableForAllAssignments;
+
+            var result = AnalysisResult.NotFixable;
+            if (remainingAssignments.All(a => !NearlyColorableAssignments.Contains(a)))
+                result |= AnalysisResult.FixableForNearlyColorableAssignments;
+            if (remainingAssignments.All(a => NonSuperabundantAssignments.Contains(a)))
+                result |= AnalysisResult.FixableForSuperabundantAssignments;
+            if (result == AnalysisResult.NotFixable && remainingAssignments.All(a => !NearlyColorableAssignments.Contains(a) || NonSuperabundantAssignments.Contains(a)))
+                result |= AnalysisResult.FixableForNearlyColorableSuperabundantAssignments;
+
+            return result;
         }
 
-        List<IAssignment> DoDynamicAnalysis()
+        List<IAssignment<TList>> DoDynamicAnalysis()
         {
-            var targetAssignments = new HashSet<IAssignment>(ColorableAssignments);
+            var targetAssignments = new HashSet<IAssignment<TList>>(ColorableAssignments);
             var remainingAssignments = NonColorableAssignments.ToList();
 
             while (true)
             {
-                var wonAssignments = new List<IAssignment>();
+                var wonAssignments = new List<IAssignment<TList>>();
 
                 for (int i = remainingAssignments.Count - 1; i >= 0; i--)
                 {
@@ -76,24 +93,57 @@ namespace Fixability
 
         void DoStaticAnalysis()
         {
-            ColorableAssignments = new List<IAssignment>();
-            NonColorableAssignments = new List<IAssignment>();
-            NonSuperabundantAssignments = new List<IAssignment>();
-            NearlyColorableAssignments = new List<IAssignment>();
+            ColorableAssignments = new List<IAssignment<TList>>();
+            NonColorableAssignments = new List<IAssignment<TList>>();
+            NonSuperabundantAssignments = new List<IAssignment<TList>>();
+            NearlyColorableAssignments = new List<IAssignment<TList>>();
 
             foreach (var assignment in Assignments)
             {
-                if (_staticAnalyzer.IsColorable(assignment))
+                if (_staticAnalyzer.IsEdgeColorable(assignment))
                     ColorableAssignments.Add(assignment);
                 else
                 {
                     NonColorableAssignments.Add(assignment);
                     if (!_staticAnalyzer.IsSuperabundant(assignment))
                         NonSuperabundantAssignments.Add(assignment);
-                    if (_staticAnalyzer.IsNearlyColorable(assignment))
+                    if (_staticAnalyzer.IsNearlyEdgeColorable(assignment))
                         NearlyColorableAssignments.Add(assignment);
                 }
             }
+        }
+
+        void BuildLineGraph()
+        {
+            int n = _graph.N;
+
+            _edges = new List<Tuple<int, int>>();
+            for (int i = 0; i < n; i++)
+            {
+                for (int j = i + 1; j < n; j++)
+                {
+                    if (_graph.AreAdjacent(i, j))
+                        _edges.Add(new Tuple<int, int>(i, j));
+                }
+            }
+
+            var meets = new bool[_edges.Count, _edges.Count];
+            for (int i = 0; i < _edges.Count; i++)
+            {
+                for (int j = i + 1; j < _edges.Count; j++)
+                {
+                    if (_edges[i].Item1 == _edges[j].Item1 ||
+                        _edges[i].Item1 == _edges[j].Item2 ||
+                        _edges[i].Item2 == _edges[j].Item1 ||
+                        _edges[i].Item2 == _edges[j].Item2)
+                    {
+                        meets[i, j] = meets[j, i] = true;
+                    }
+                }
+            }
+
+            _lineGraph = new TGraph();
+            _lineGraph.Initialize(meets);
         }
     }
 }

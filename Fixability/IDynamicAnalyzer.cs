@@ -5,8 +5,9 @@ using System.Text;
 
 namespace Fixability
 {
-    public interface IDynamicAnalyzer
+    public interface IDynamicAnalyzer<TList>
     {
-        bool Analyze(IAssignment assignment, HashSet<IAssignment> targets);
+        bool Analyze(IAssignment<TList> assignment, HashSet<IAssignment<TList>> targets);
+        void Initialize(IGraph<TList> graph, IGraph<TList> lineGraph, List<Tuple<int, int>> edges);
     }
 }

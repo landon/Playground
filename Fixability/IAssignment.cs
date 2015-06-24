@@ -5,7 +5,8 @@ using System.Text;
 
 namespace Fixability
 {
-    public interface IAssignment
+    public interface IAssignment<TList>
     {
+        TList CommonColors(int v, int w);
     }
 }

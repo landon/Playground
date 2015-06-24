@@ -39,15 +39,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Basic\Assignment.cs" />
+    <Compile Include="Basic\DynamicAnalyzer.cs" />
+    <Compile Include="Basic\StaticAnalyzer.cs" />
     <Compile Include="Enumerations.cs" />
     <Compile Include="IAssignment.cs" />
     <Compile Include="IAssignmentGenerator.cs" />
-    <Compile Include="IListHelper.cs" />
     <Compile Include="IStaticAnalyzer.cs" />
     <Compile Include="IGraph.cs" />
     <Compile Include="IDynamicAnalyzer.cs" />
     <Compile Include="Mind.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Optimized\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
