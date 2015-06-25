@@ -23,9 +23,9 @@ namespace Fixability
 
         public bool Analyze(IAssignment<TColorSet, TVertexSet> assignment, HashSet<IAssignment<TColorSet, TVertexSet>> targets)
         {
-            for (int i = 0; i < assignment.ColorCount; i++)
+            for (int i = 0; i < assignment.PotSize; i++)
             {
-                for (int j = i + 1; j < assignment.ColorCount; j++)
+                for (int j = i + 1; j < assignment.PotSize; j++)
                 {
                     var swappable = assignment.GetSwappable(i, j);
 

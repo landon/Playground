@@ -9,7 +9,7 @@ namespace Fixability
     {
         TColorSet CommonColors(int v, int w);
         int Psi(TVertexSet set);
-        int ColorCount { get; }
+        int PotSize { get; }
         TVertexSet GetSwappable(int alpha, int beta);
         IAssignment<TColorSet, TVertexSet> PerformSwap(int alpha, int beta, TVertexSet swapVertices);
     }

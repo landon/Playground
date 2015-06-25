@@ -6,31 +6,93 @@ using System.Threading.Tasks;
 
 namespace Fixability.Basic
 {
-    public class Assignment<TColorSet, TVertexSet> : IAssignment<TColorSet, TVertexSet>
+    public class Assignment : IAssignment<List<int>, List<int>>
     {
-        public TColorSet CommonColors(int v, int w)
+        List<List<int>> _lists;
+        int _potSize;
+        int _hashCode;
+
+        public int PotSize { get { return _potSize; } }
+
+        public Assignment(List<List<int>> lists, int potSize)
         {
-            throw new NotImplementedException();
+            _lists = lists;
+            _potSize = potSize;
         }
 
-        public int Psi(TVertexSet set)
+        public override bool Equals(object obj)
         {
-            throw new NotImplementedException();
+            return base.Equals(obj);
+        }
+        public bool Equals(Assignment other)
+        {
+            return false;
         }
 
-        public int ColorCount
+        public override int GetHashCode()
         {
-            get { throw new NotImplementedException(); }
+            return _hashCode;
         }
 
-        public TVertexSet GetSwappable(int alpha, int beta)
+        public List<int> CommonColors(int v, int w)
         {
-            throw new NotImplementedException();
+            return _lists[v].Intersect(_lists[v]).ToList();
         }
 
-        public IAssignment<TColorSet, TVertexSet> PerformSwap(int alpha, int beta, TVertexSet swapVertices)
+        public int Psi(List<int> set)
         {
-            throw new NotImplementedException();
+            var psi = 0;
+
+            for (int i = 0; i < _potSize; i++)
+            {
+                var count = _lists.Where((ll, j) => set.Contains(j) && ll.Contains(i)).Count();
+                psi += count / 2;
+            }
+
+            return psi;
+        }
+
+        public List<int> GetSwappable(int alpha, int beta)
+        {
+            var singleIndices = new List<int>(_lists.Count);
+            for (int i = 0; i < _lists.Count; i++)
+            {
+                var hA = _lists[i].Contains(alpha);
+                var hB = _lists[i].Contains(beta);
+
+                if (hA ^ hB)
+                    singleIndices.Add(i);
+            }
+
+            return singleIndices;
+        }
+
+        public IAssignment<List<int>, List<int>> PerformSwap(int alpha, int beta, List<int> swapVertices)
+        {
+            var swappedLists = new List<List<int>>(_lists.Count);
+            for (int i = 0; i < _lists.Count; i++)
+            {
+                var list = _lists[i].ToList();
+                if (swapVertices.Contains(i))
+                {
+                    if (list.Contains(alpha))
+                    {
+                        list.Remove(alpha);
+                        list.Add(beta);
+                    }
+                    else
+                    {
+                        list.Remove(beta);
+                        list.Add(alpha);
+                    }
+
+                    list.Sort();
+                }
+
+                swappedLists.Add(list);
+            }
+
+            return new Assignment(swappedLists, _potSize);
         }
     }
 }
