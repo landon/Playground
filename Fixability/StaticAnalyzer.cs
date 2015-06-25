@@ -26,7 +26,7 @@ namespace Fixability
 
         public bool IsSuperabundant(IAssignment<TColorSet, TVertexSet> assignment)
         {
-            return _graph.VertexSubsets.All(set => assignment.Psi(set) >= _graph.EdgeCountIn(set));
+            return _graph.VertexSubsets.All(set => assignment.Psi(set) >= _graph.EdgeCountOn(set));
         }
 
         public bool IsNearlyEdgeColorable(IAssignment<TColorSet, TVertexSet> assignment)

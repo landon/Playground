@@ -16,6 +16,6 @@ namespace Fixability
         void Initialize(bool[,] adjacent);
         bool IsChoosable(Func<int, TColorSet> geTColorSet);
         bool IsChoosableWithoutVertex(int v, Func<int, TColorSet> geTColorSet);
-        int EdgeCountIn(TVertexSet set);
+        int EdgeCountOn(TVertexSet set);
     }
 }
