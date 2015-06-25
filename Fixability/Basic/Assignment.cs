@@ -9,6 +9,7 @@ namespace Fixability.Basic
     public class Assignment : IAssignment<List<int>, List<int>>
     {
         List<List<int>> _lists;
+        List<List<int>> _dual;
         int _potSize;
         int _hashCode;
 
@@ -18,15 +19,78 @@ namespace Fixability.Basic
         {
             _lists = lists;
             _potSize = potSize;
+
+            ComputeDual();
+            ComputeHashCode();
+        }
+
+        void ComputeDual()
+        {
+            _dual = new List<List<int>>(_potSize);
+            for (int i = 0; i < _potSize; i++)
+            {
+                _dual[i] = new List<int>();
+                for (int j = 0; j < _lists.Count; j++)
+                {
+                    if (_lists[j].Contains(i))
+                        _dual[i].Add(j);
+                }
+            }
+
+            _dual.Sort(LexOrdering);
+        }
+
+        int LexOrdering(List<int> a, List<int> b)
+        {
+            for (int i = 0; i < Math.Min(a.Count, b.Count); i++)
+            {
+                if (a[i] < b[i])
+                    return -1;
+                if (a[i] > b[i])
+                    return 1;
+            }
+
+            if (a.Count < b.Count)
+                return -1;
+            if (a.Count > b.Count)
+                return 1;
+            
+            return 0;
+        }
+
+        void ComputeHashCode()
+        {
+            _hashCode = 239;
+            unchecked
+            {
+                foreach (var l in _dual)
+                {
+                    var bits = 0;
+                    for (int j = 0; j < l.Count; j++)
+                        bits |= (1 << (j % 29));
+
+                    _hashCode = _hashCode * 37 + bits;
+                }
+            }
         }
 
         public override bool Equals(object obj)
         {
-            return base.Equals(obj);
+            return Equals((Assignment)obj);
         }
+
         public bool Equals(Assignment other)
         {
-            return false;
+            if (other._dual.Count != _dual.Count)
+                return false;
+
+            for (int i = 0; i <_dual.Count; i++)
+            {
+                if (!_dual[i].SequenceEqual(other._dual[i]))
+                    return false;
+            }
+
+            return true;
         }
 
         public override int GetHashCode()

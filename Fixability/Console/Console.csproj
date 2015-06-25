@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{FFC76F8F-2FBD-4520-97DE-C885E2CD885B}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{A6966F1B-CC3D-4999-AD6E-52AA4A129A16}</ProjectGuid>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Fixability</RootNamespace>
-    <AssemblyName>Fixability</AssemblyName>
+    <RootNamespace>Console</RootNamespace>
+    <AssemblyName>Console</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -29,6 +29,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -39,21 +42,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Basic\Assignment.cs" />
-    <Compile Include="Basic\Graph.cs" />
-    <Compile Include="Basic\Operations.cs" />
-    <Compile Include="DynamicAnalyzer.cs" />
-    <Compile Include="IOperations.cs" />
-    <Compile Include="StaticAnalyzer.cs" />
-    <Compile Include="Enumerations.cs" />
-    <Compile Include="IAssignment.cs" />
-    <Compile Include="IAssignmentGenerator.cs" />
-    <Compile Include="IGraph.cs" />
-    <Compile Include="Mind.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Optimized\" />
+    <ProjectReference Include="..\Fixability.csproj">
+      <Project>{ffc76f8f-2fbd-4520-97de-c885e2cd885b}</Project>
+      <Name>Fixability</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
