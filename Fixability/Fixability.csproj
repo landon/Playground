@@ -40,6 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Basic\Assignment.cs" />
+    <Compile Include="Basic\AssignmentGenerator.cs" />
     <Compile Include="Basic\Graph.cs" />
     <Compile Include="Basic\Operations.cs" />
     <Compile Include="DynamicAnalyzer.cs" />
