@@ -12,9 +12,15 @@ namespace AverageDegreeBounds
         {
             for (int k = 4; k <= 20; k++)
             {
-                Console.WriteLine(string.Format("{3} & {0:0.0000} & {1:0.0000} & \\bf{{{2:0.0000}}}", gallai(k), ks(k), ours(k), k));
+                Console.WriteLine(string.Format("{3} & {0:0.0000}\t\t{1:0.0000}\t\t{2:0.0000}\t\t{4:0.0000}", gallai(k), ks(k), ours(k), k, best(k)));
             }
+
             Console.ReadKey();
+        }
+
+        static double best(int k)
+        {
+            return g_avg(k, k / 2.0 + 1.0 / (k - 1));
         }
 
         static double ks(int k)
