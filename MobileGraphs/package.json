@@ -1,0 +1,14 @@
+{
+  "name": "mobilegraphs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "MobileGraphs.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "grunt": "^0.4.5"
+  }
+}
