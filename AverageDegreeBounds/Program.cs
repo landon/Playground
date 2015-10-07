@@ -10,12 +10,26 @@ namespace AverageDegreeBounds
     {
         static void Main(string[] args)
         {
+            Console.WriteLine(ComputeBetterOreBound(8));
+            Console.ReadKey();
+        }
+
+        static double ComputeBetterOreBound(int delta)
+        {
+            return alpha(delta + 1) * (delta - 2) + (2 - alpha(delta + 1)) * (delta - 1) * (delta - 5) / (delta) / (delta - 3);
+        }
+
+        static double ComputeOreBound(int delta)
+        {
+            return alpha(delta + 1) * (delta - 2) + 2 * (1 - alpha(delta + 1)) * (delta - 1) * (delta - 5) / (delta) / (delta - 3);
+        }
+
+        static void PrintBounds()
+        {
             for (int k = 4; k <= 20; k++)
             {
                 Console.WriteLine(string.Format("{3} & {0:0.0000}\t\t{1:0.0000}\t\t{2:0.0000}\t\t{4:0.0000}", gallai(k), ks(k), ours(k), k, best(k)));
             }
-
-            Console.ReadKey();
         }
 
         static double best(int k)
