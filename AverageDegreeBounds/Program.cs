@@ -10,8 +10,69 @@ namespace AverageDegreeBounds
     {
         static void Main(string[] args)
         {
-            Console.WriteLine(ComputeBetterOreBound(8));
+            var list = new List<int>() { 4, 5, 6, 7, 8, 9, 10, 15, 20 };
+
+            foreach (var k in list)
+            {
+                if (k <= 6)
+                    Console.WriteLine(k + " : " + NewBoundSmallK(k));
+                else
+                    Console.WriteLine(k + " : " + NewBoundSmallK(k));
+            }
+
+
             Console.ReadKey();
+        }
+
+        static double NewBoundSmallK(int k)
+        {
+            return k - 1.0 + (k - 3.0) / (k * k - 2 * k + 2.0);
+        }
+
+        static double DischargingBound56(int k)
+        {
+            return k - 1.0 + (k - 3.0) * (2.0 * k - 5.0) / (Math.Pow(k, 3.0) + 2*Math.Pow(k, 2.0) - 18.0 * k + 15.0);
+        }
+
+        static double DischargingBound(int k)
+        {
+            return k - 1.0 + (k - 3.0) * (2.0 * k - 5.0) / (Math.Pow(k, 3.0) + Math.Pow(k, 2.0) - 15.0 * k + 15.0);
+        }
+
+        static double SuperBestPossible(int k)
+        {
+            return g_avg(k, SuperBestPossibleC(k));
+        }
+
+        static double SuperBestPossibleC(int k)
+        {
+            return k / 2.0 + 1.0 / (k - 1);
+        }
+
+        static double BestPossible(int k)
+        {
+            return g_avg(k, BestPossibleC(k));
+        }
+
+        static double BestPossibleC(int k)
+        {
+            if (k <= 6)
+                return (k - 4) * (1.0 / 2.0 + 1.0 / (k - 1));
+
+            return (k - 3) * (1.0 / 2.0 + 1.0 / (k - 1));
+        }
+
+        static double LatestBound(int k)
+        {
+            return g_avg(k, LatestBoundC(k));
+        }
+
+        static double LatestBoundC(int k)
+        {
+            if (k <= 6)
+                return (k - 4) * (1.0 / 2.0 + (k - 5.0) / (3.0 * (k - 2) * (k - 3)));
+
+            return (k - 3) * (1.0 / 2.0 + (k - 5.0) / (3.0 * (k - 2) * (k - 3)));
         }
 
         static double ComputeBetterOreBound(int delta)
