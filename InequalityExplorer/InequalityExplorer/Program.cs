@@ -17,7 +17,6 @@ namespace InequalityExplorer
             c.Simplify();
 
             Console.Write(c.ToString());
-
             Console.ReadKey();
         }
     }

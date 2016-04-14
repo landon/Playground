@@ -51,7 +51,7 @@ namespace InequalityExplorer
 
         public override string ToString()
         {
-            return string.Join("", Factors.Select(t => "(" + t.ToString() + ")"));
+            return string.Join("", Factors.Select(t => "(" + t.ToString() + ")").OrderBy(x => x));
         }
     }
 }
