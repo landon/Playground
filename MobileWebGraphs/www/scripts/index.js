@@ -22,10 +22,14 @@
         tool.on("mousedrag", doMouseDrag);
         tool.activate();
 
-        setInterval(doTick, 100);
+        paper.view.onFrame = doFrame;
+        setInterval(doTick, 10);
         paper.view.draw();
     };
 
+    function doFrame(event) {
+        graphCanvas.doFrame(event);
+    }
     function doTick() {
         graphCanvas.tick();
     }

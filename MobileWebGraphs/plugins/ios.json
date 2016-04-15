@@ -9,6 +9,9 @@
     "installed_plugins": {
         "cordova-plugin-whitelist": {
             "PACKAGE_NAME": "io.cordova.myappd57e19"
+        },
+        "cordova-plugin-vibration": {
+            "PACKAGE_NAME": "io.cordova.myappd57e19"
         }
     },
     "dependent_plugins": {}

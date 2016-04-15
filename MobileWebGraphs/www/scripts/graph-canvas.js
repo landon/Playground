@@ -3,91 +3,98 @@
     this.scope = scope;
     this.state = "doing nothing";
     this.vertices = [];
+    this.edges = [];
     this.mouseDownTime = 0;
     this.regionPath = {};
-    this.draggedItem = {};
+    this.touchedVertex = {};
     this.mouseDownPoint = {};
+    this.distanceDragged = 0;
 
     scope.setup(canvas);
+}
+
+WebGraphs.GraphCanvas.prototype.areAdjacent = function (v1, v2) {
+    return this.edges.some(function (e) {
+        return e.v1 == v1 && e.v2 == v2 || e.v1 == v2 && e.v2 == v1;
+    });
+}
+
+WebGraphs.GraphCanvas.prototype.doFrame = function (event) {
+    this.vertices.forEach(function (v) {
+        v.doFrame(event);
+    }, this);
+
+    this.edges.forEach(function (e) {
+        e.doFrame(event);
+    }, this);
 }
 
 WebGraphs.GraphCanvas.prototype.tick = function () {
     switch (this.state) {
         case "doing nothing":
             break;
-        case "adding vertex":
+        case "touching canvas":
             var currentTime = new Date().getTime();
-            if (currentTime - this.mouseDownTime > 200) {
-                this.state = "doing nothing";
+            if (currentTime - this.mouseDownTime > WebGraphs.VertexAddDelay) {
                 var v = new WebGraphs.Vertex(this.mouseDownPoint, paper);
                 this.vertices.push(v);
                 this.scope.view.update();
+                navigator.vibrate(50);
+                this.state = "doing nothing";
             }
             break;
-        case "dragging item":
-            break;
-        case "dragging selected items":
-            break;
-        case "drawing region":
-            break;
-    }
-};
+        case "touching vertex":
+            var currentTime = new Date().getTime();
+            if (currentTime - this.mouseDownTime > WebGraphs.EdgeAddDelay) {
+                this.vertices.forEach(function (v) {
+                    var added = false;
+                    if (v.shape.selected && !this.areAdjacent(this.touchedVertex, v)) {
+                        this.edges.push(new WebGraphs.Edge(this.touchedVertex, v, paper));
+                        added = true;
+                    }
 
-WebGraphs.GraphCanvas.prototype.doMouseDrag = function (event) {
-    switch (this.state) {
-        case "doing nothing":
-            break;
-        case "adding vertex":
-            this.state = "drawing region";
-            this.regionPath = new this.scope.Path();
-            this.regionPath.strokeColor = 'blue';
-            this.regionPath.add(event.point);
-            break;
-        case "dragging item":
-            this.draggedItem.translate(event.delta);
-            break;
-        case "dragging selected items":
-            this.vertices.forEach(function (v) {
-                if (v.shape.selected) {
-                    v.translate(event.delta);
-                }
-            });
-            break;
-        case "drawing region":
-            this.regionPath.add(event.point);
-            break;
+                    if (added)
+                        navigator.vibrate(50);
+                }, this);
 
+                this.scope.view.update();
+                this.state = "doing nothing";
+            }
+            break;
+        case "dragging vertex":
+            break;
+        case "dragging canvas":
+            break;
     }
 };
 
 WebGraphs.GraphCanvas.prototype.doMouseDown = function (event) {
+    this.mouseDownTime = new Date().getTime();
+    this.mouseDownPoint = event.point;
+    this.distanceDragged = 0;
+
     switch (this.state) {
         case "doing nothing":
             if (event.item && event.item.isVertex) {
-                if (event.item.selected) {
-                    this.state = "dragging selected items";
-                }
-                else {
-                    this.state = "dragging item";
-                    this.draggedItem = event.item;
-                }
+                this.state = "touching vertex";
+                this.touchedVertex = this.vertices.find(function(v) {
+                    return v.shape == event.item;
+                });
             }
             else {
-                this.mouseDownTime = new Date().getTime();
-                this.mouseDownPoint = event.point;
-                this.state = "adding vertex";
+                this.state = "touching canvas";
             }
             break;
-        case "adding vertex":
+        case "touching canvas":
             this.state = "doing nothing";
             break;
-        case "dragging item":
+        case "touching vertex":
             this.state = "doing nothing";
             break;
-        case "dragging selected items":
+        case "dragging vertex":
             this.state = "doing nothing";
             break;
-        case "drawing region":
+        case "dragging canvas":
             this.state = "doing nothing";
             break;
     }
@@ -95,16 +102,18 @@ WebGraphs.GraphCanvas.prototype.doMouseDown = function (event) {
 
 WebGraphs.GraphCanvas.prototype.doMouseUp = function (event) {
     switch (this.state) {
-        case "adding vertex":
+        case "doing nothing":
+            break;
+        case "touching canvas":
             this.state = "doing nothing";
             break;
-        case "dragging item":
+        case "touching vertex":
             this.state = "doing nothing";
             break;
-        case "dragging selected items":
+        case "dragging vertex":
             this.state = "doing nothing";
             break;
-        case "drawing region":
+        case "dragging canvas":
             this.state = "doing nothing";
             var ctrlDown = this.scope.Key.isDown('control');
             this.vertices.forEach(function (v) {
@@ -118,3 +127,40 @@ WebGraphs.GraphCanvas.prototype.doMouseUp = function (event) {
 
     }
 }
+
+WebGraphs.GraphCanvas.prototype.doMouseDrag = function (event) {
+    this.distanceDragged += event.delta.length;
+    switch (this.state) {
+        case "doing nothing":
+            break;
+        case "touching canvas":
+            if (this.distanceDragged > 30) {
+                this.state = "dragging canvas";
+                this.regionPath = new this.scope.Path();
+                this.regionPath.strokeColor = 'blue';
+                this.regionPath.add(event.point);
+            }
+            break;
+        case "touching vertex":
+            if (this.distanceDragged > 30) {
+                this.state = "dragging vertex";
+            }
+            break;
+        case "dragging vertex":
+            if (this.touchedVertex.shape.selected) {
+                this.vertices.forEach(function (v) {
+                    if (v.shape.selected) {
+                        v.translate(event.delta);
+                    }
+                });
+            }
+            else {
+                this.touchedVertex.translate(event.delta);
+            }
+            break;
+        case "dragging canvas":
+            this.regionPath.add(event.point);
+            break;
+
+    }
+};
