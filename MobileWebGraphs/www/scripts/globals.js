@@ -26,7 +26,6 @@ if (!Array.prototype.find) {
 }
 
 
-
 // Mozilla 1.8 has support for indexOf, lastIndexOf, forEach, filter, map, some, every
 // http://developer-test.mozilla.org/docs/Core_JavaScript_1.5_Reference:Objects:Array:lastIndexOf
 if (!Array.prototype.indexOf) {
@@ -148,7 +147,21 @@ Array.prototype.removeAt = function (i) {
 };
 
 Array.prototype.remove = function (obj) {
-    var i = this.indexOf(obj);
-    if (i != -1)
-        this.splice(i, 1);
+    var j = 0;
+    for (var i = 0, l = this.length; i < l; i++) {
+        if (this[i] !== obj) {
+            this[j++] = this[i];
+        }
+    }
+    this.length = j;
+};
+
+Array.prototype.removeAll = function (f) {
+    var j = 0;
+    for (var i = 0, l = this.length; i < l; i++) {
+        if (!f(this[i])) {
+            this[j++] = this[i];
+        }
+    }
+    this.length = j;
 };

@@ -164,3 +164,20 @@ WebGraphs.GraphCanvas.prototype.doMouseDrag = function (event) {
 
     }
 };
+
+WebGraphs.GraphCanvas.prototype.deleteSelected = function () {
+    var selectedVertices = this.vertices.filter(function (v) {
+        return v.shape.selected;
+    });
+
+    selectedVertices.forEach(function (v) {
+        v.shape.remove();
+        this.vertices.remove(v);
+        this.edges.removeAll(function (e) {
+            var incident = e.v1 == v || e.v2 == v;
+            if (incident)
+                e.shape.remove();
+            return incident;
+        });
+    }, this);
+}

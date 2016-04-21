@@ -1,23 +1,38 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *">
+<head>
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-tap-highlight" content="no">
+    <title>MobileWebGraphs</title>
 
-        <meta name="format-detection" content="telephone=no">
-        <meta name="msapplication-tap-highlight" content="no">
-        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height">
-        <link rel="stylesheet" type="text/css" href="css/index.css">
-        <title>MobileWebGraphs</title>
-    </head>
-    <body>
-        <canvas id="mainCanvas" style="border:0px solid #000000; position:absolute; top:0;left:0;"></canvas>
-        <script type="text/javascript" src="cordova.js"></script>
-        <script type="text/javascript" src="scripts/platformOverrides.js"></script>
-        <script type="text/javascript" src="scripts/paper-full.min.js"></script>
-        <script type="text/javascript" src="scripts/globals.js"></script>
-        <script type="text/javascript" src="scripts/vertex.js"></script>
-        <script type="text/javascript" src="scripts/edge.js"></script>
-        <script type="text/javascript" src="scripts/graph-canvas.js"></script>
-        <script type="text/javascript" src="scripts/index.js"></script>
-    </body>
+    <link href="ionic/css/ionic.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="css/index.css">
+    
+   
+</head>
+<body ng-controller="TheController">
+    <div class="bar bar-header">
+        <button class="button icon ion-android-create"></button>
+        <button class="button icon ion-android-clipboard"></button>
+        <button class="button icon ion-android-share-alt"></button>
+        <button class="button icon ion-android-delete" ng-click="deleteSelected()"></button>
+        <button class="button icon ion-android-more-vertical"></button>
+    </div>
+    
+    <canvas id="mainCanvas" style="border:0px solid #000000; position:relative; top:0;left:0;"></canvas>
+
+    <script type="text/javascript" src="scripts/platformOverrides.js"></script>
+    <script type="text/javascript" src="scripts/paper-full.min.js"></script>
+    <script type="text/javascript" src="scripts/globals.js"></script>
+    <script type="text/javascript" src="scripts/vertex.js"></script>
+    <script type="text/javascript" src="scripts/edge.js"></script>
+    <script type="text/javascript" src="scripts/graph-canvas.js"></script>
+    <script type="text/javascript" src="scripts/index.js"></script>
+
+    <script type="text/javascript" src="ionic/js/ionic.bundle.min.js"></script>
+    <script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript" src="scripts/angular-app.js"></script>
+</body>
 </html>

@@ -16,6 +16,7 @@
         canvas.style.backgroundColor = 'rgba(247, 247, 247, 1.0)';
 
         graphCanvas = new WebGraphs.GraphCanvas(canvas, paper);
+        WebGraphs.TheGraphCanvas = graphCanvas;
 
         tool = new paper.Tool();
         tool.on("mousedown", doMouseDown);
