@@ -19,4 +19,4 @@ WebGraphs.Edge.prototype.doFrame = function (event) {
         this.shape.strokeColor = 'black';
         this.shape.isEdge = true;
     }
-}
+};

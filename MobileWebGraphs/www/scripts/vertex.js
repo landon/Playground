@@ -7,8 +7,8 @@
 
 WebGraphs.Vertex.prototype.translate = function (delta) {
     this.shape.translate(delta);
-}
+};
 
 WebGraphs.Vertex.prototype.doFrame = function (event) {
-}
+};
 

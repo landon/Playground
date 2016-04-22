@@ -11,13 +11,13 @@
     this.distanceDragged = 0;
 
     scope.setup(canvas);
-}
+};
 
 WebGraphs.GraphCanvas.prototype.areAdjacent = function (v1, v2) {
     return this.edges.some(function (e) {
         return e.v1 == v1 && e.v2 == v2 || e.v1 == v2 && e.v2 == v1;
     });
-}
+};
 
 WebGraphs.GraphCanvas.prototype.doFrame = function (event) {
     this.vertices.forEach(function (v) {
@@ -27,7 +27,7 @@ WebGraphs.GraphCanvas.prototype.doFrame = function (event) {
     this.edges.forEach(function (e) {
         e.doFrame(event);
     }, this);
-}
+};
 
 WebGraphs.GraphCanvas.prototype.tick = function () {
     switch (this.state) {
@@ -126,7 +126,7 @@ WebGraphs.GraphCanvas.prototype.doMouseUp = function (event) {
             break;
 
     }
-}
+};
 
 WebGraphs.GraphCanvas.prototype.doMouseDrag = function (event) {
     this.distanceDragged += event.delta.length;
@@ -180,4 +180,4 @@ WebGraphs.GraphCanvas.prototype.deleteSelected = function () {
             return incident;
         });
     }, this);
-}
+};
