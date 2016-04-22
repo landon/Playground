@@ -17,6 +17,7 @@
         <button class="button icon ion-android-create"></button>
         <button class="button icon ion-android-clipboard"></button>
         <button class="button icon ion-android-share-alt"></button>
+        <button class="button icon ion-android-folder-open" ng-click="openFolderPopup()"></button>
         <button class="button icon ion-android-delete" ng-click="deleteSelected()"></button>
         <button class="button icon ion-android-more-vertical"></button>
     </div>
@@ -24,7 +25,7 @@
     <canvas id="mainCanvas" style="border:0px solid #000000; position:relative; top:0;left:0;"></canvas>
 
     <script type="text/javascript" src="scripts/platformOverrides.js"></script>
-    <script type="text/javascript" src="scripts/paper-full.min.js"></script>
+    <script type="text/javascript" src="scripts/paper-full.js"></script>
     <script type="text/javascript" src="scripts/typedarray.js"></script>
     <script type="text/javascript" src="scripts/ascii85.js"></script>
     <script type="text/javascript" src="scripts/globals.js"></script>
@@ -34,7 +35,7 @@
     <script type="text/javascript" src="scripts/graph-canvas.js"></script>
     <script type="text/javascript" src="scripts/index.js"></script>
 
-    <script type="text/javascript" src="ionic/js/ionic.bundle.min.js"></script>
+    <script type="text/javascript" src="ionic/js/ionic.bundle.js"></script>
     <script type="text/javascript" src="cordova.js"></script>
     <script type="text/javascript" src="scripts/angular-app.js"></script>
 </body>

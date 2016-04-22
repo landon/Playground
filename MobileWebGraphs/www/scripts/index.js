@@ -9,11 +9,7 @@
     function onDeviceReady() {
         document.addEventListener('pause', onPause.bind(this), false);
         document.addEventListener('resume', onResume.bind(this), false);
-
-        //var vv = ascii85.decode('<~7n3OZ!*]F\'!!\",eJ-7\\P\\-lgI!!((q`!Ja7paU5!63_Ns7/-lb!<<-#/-,tU\'``c5IXHTlIXV>,&-3\\#!uDMtI\"$M~>');
-        //var vvv = unpack(vv);
-        //var wxx = QLZ.decompress(vvv);
-        
+       
         var canvas = document.getElementById("mainCanvas");
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
