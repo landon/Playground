@@ -29,11 +29,7 @@ app.controller('TheController', function ($scope, $ionicPopup) {
         });
 
         pasteWebGraphPopup.then(function (webgraph) {
-            console.log('pasted: ', webgraph);
-
-            //var vv = ascii85.decode('<~7n3OZ!*]F\'!!\",eJ-7\\P\\-lgI!!((q`!Ja7paU5!63_Ns7/-lb!<<-#/-,tU\'``c5IXHTlIXV>,&-3\\#!uDMtI\"$M~>');
-            //var vvv = unpack(vv);
-            //var wxx = QLZ.decompress(vvv);
+            WebGraphs.TheGraphCanvas.buildGraphCanvasFromSilverlightFormat(webgraph);
         });
     }
 });

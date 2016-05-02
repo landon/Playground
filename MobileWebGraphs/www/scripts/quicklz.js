@@ -161,7 +161,7 @@ var QLZ = {};
                 dst += matchlen;
 
                 if (level == 1) {
-                    fetch = QLZ.fast_read(destination, last_hashed + 1, 3); // destination[last_hashed + 1] | (destination[last_hashed + 2] << 8) | (destination[last_hashed + 3] << 16);
+                    fetch = QLZ.fast_read(destination, last_hashed + 1, 3); 
                     while (last_hashed < dst - matchlen) {
                         last_hashed++;
                         hash = ((fetch >>> 12) ^ fetch) & (HASH_VALUES - 1);

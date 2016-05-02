@@ -2,31 +2,28 @@
     this.canvas = canvas;
     this.scope = scope;
     this.state = "doing nothing";
-    this.vertices = [];
-    this.edges = [];
+    this.graph = new WebGraphs.Graph(scope);
     this.mouseDownTime = 0;
     this.regionPath = {};
     this.touchedVertex = {};
     this.mouseDownPoint = {};
     this.distanceDragged = 0;
-
     scope.setup(canvas);
+    this.layer = new this.scope.Layer();
 };
 
-WebGraphs.GraphCanvas.prototype.areAdjacent = function (v1, v2) {
-    return this.edges.some(function (e) {
-        return e.v1 == v1 && e.v2 == v2 || e.v1 == v2 && e.v2 == v1;
-    });
-};
+WebGraphs.GraphCanvas.prototype.buildGraphCanvasFromSilverlightFormat = function (webgraph) {
+    var wg = webgraph.replace('webgraph:', '');
+    var packed = ascii85.decode('<~' + wg + '~>');
+    var compressed = unpack(packed);
+    var raw = QLZ.decompress(compressed);
+
+    this.layer.visible = false;
+    this.layer = new this.scope.Layer();
+}
 
 WebGraphs.GraphCanvas.prototype.doFrame = function (event) {
-    this.vertices.forEach(function (v) {
-        v.doFrame(event);
-    }, this);
-
-    this.edges.forEach(function (e) {
-        e.doFrame(event);
-    }, this);
+    this.graph.doFrame(event);
 };
 
 WebGraphs.GraphCanvas.prototype.tick = function () {
@@ -36,28 +33,20 @@ WebGraphs.GraphCanvas.prototype.tick = function () {
         case "touching canvas":
             var currentTime = new Date().getTime();
             if (currentTime - this.mouseDownTime > WebGraphs.VertexAddDelay) {
-                var v = new WebGraphs.Vertex(this.mouseDownPoint, paper);
-                this.vertices.push(v);
-                this.scope.view.update();
-                navigator.vibrate(50);
+                if (this.graph.addVertex(this.mouseDownPoint)) {
+                    this.scope.view.update();
+                    navigator.vibrate(50);
+                }
                 this.state = "doing nothing";
             }
             break;
         case "touching vertex":
             var currentTime = new Date().getTime();
             if (currentTime - this.mouseDownTime > WebGraphs.EdgeAddDelay) {
-                this.vertices.forEach(function (v) {
-                    var added = false;
-                    if (v.shape.selected && !this.areAdjacent(this.touchedVertex, v)) {
-                        this.edges.push(new WebGraphs.Edge(this.touchedVertex, v, paper));
-                        added = true;
-                    }
-
-                    if (added)
-                        navigator.vibrate(50);
-                }, this);
-
-                this.scope.view.update();
+                if (this.graph.addEdgesToSelected(this.touchedVertex)) {
+                    this.scope.view.update();
+                    navigator.vibrate(50);
+                }
                 this.state = "doing nothing";
             }
             break;
@@ -77,9 +66,7 @@ WebGraphs.GraphCanvas.prototype.doMouseDown = function (event) {
         case "doing nothing":
             if (event.item && event.item.isVertex) {
                 this.state = "touching vertex";
-                this.touchedVertex = this.vertices.find(function(v) {
-                    return v.shape == event.item;
-                });
+                this.touchedVertex = this.graph.findVertexByShape(event.item);
             }
             else {
                 this.state = "touching canvas";
@@ -116,12 +103,7 @@ WebGraphs.GraphCanvas.prototype.doMouseUp = function (event) {
         case "dragging canvas":
             this.state = "doing nothing";
             var ctrlDown = this.scope.Key.isDown('control');
-            this.vertices.forEach(function (v) {
-                if (!ctrlDown)
-                    v.shape.selected = false;
-                if (this.regionPath.contains(v.shape.position))
-                    v.shape.selected = !v.shape.selected;
-            }, this);
+            this.graph.doSelection(ctrlDown, this.regionPath);
             this.regionPath.remove();
             break;
 
@@ -147,37 +129,14 @@ WebGraphs.GraphCanvas.prototype.doMouseDrag = function (event) {
             }
             break;
         case "dragging vertex":
-            if (this.touchedVertex.shape.selected) {
-                this.vertices.forEach(function (v) {
-                    if (v.shape.selected) {
-                        v.translate(event.delta);
-                    }
-                });
-            }
-            else {
+            if (this.touchedVertex.shape.selected)
+                this.graph.translateSelected(event.delta);
+            else
                 this.touchedVertex.translate(event.delta);
-            }
             break;
         case "dragging canvas":
             this.regionPath.add(event.point);
             break;
 
     }
-};
-
-WebGraphs.GraphCanvas.prototype.deleteSelected = function () {
-    var selectedVertices = this.vertices.filter(function (v) {
-        return v.shape.selected;
-    });
-
-    selectedVertices.forEach(function (v) {
-        v.shape.remove();
-        this.vertices.remove(v);
-        this.edges.removeAll(function (e) {
-            var incident = e.v1 == v || e.v2 == v;
-            if (incident)
-                e.shape.remove();
-            return incident;
-        });
-    }, this);
 };
