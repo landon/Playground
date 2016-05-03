@@ -1,16 +1,29 @@
 ﻿WebGraphs.GraphCanvas = function (canvas, scope) {
+    scope.setup(canvas);
     this.canvas = canvas;
     this.scope = scope;
-    this.state = "doing nothing";
-    this.graph = new WebGraphs.Graph(scope);
+    this.layers = [];
+    this.newGraphLayer();
+};
+
+WebGraphs.GraphCanvas.prototype.newGraphLayer = function () {
+    if (this.currentLayer)
+        this.currentLayer.visible = false;
+    var layer = new this.scope.Layer();
+    layer.activate();
+    this.currentLayer = layer;
+    this.layers.push(layer);
+
+    this.graph = new WebGraphs.Graph(this.scope);
     this.mouseDownTime = 0;
     this.regionPath = {};
     this.touchedVertex = {};
     this.mouseDownPoint = {};
     this.distanceDragged = 0;
-    scope.setup(canvas);
-    this.layer = new this.scope.Layer();
-};
+    this.state = "doing nothing";
+
+    layer.graph = this.graph;
+}
 
 WebGraphs.GraphCanvas.prototype.buildGraphCanvasFromSilverlightFormat = function (webgraph) {
     var wg = webgraph.replace('webgraph:', '');
@@ -18,8 +31,53 @@ WebGraphs.GraphCanvas.prototype.buildGraphCanvasFromSilverlightFormat = function
     var compressed = unpack(packed);
     var raw = QLZ.decompress(compressed);
 
-    this.layer.visible = false;
-    this.layer = new this.scope.Layer();
+    this.newGraphLayer();
+
+    var dv = new DataView(raw.buffer);
+    var offset = 0;
+    var minx = 10000;
+    var maxx = -10000;
+    var miny = 10000;
+    var maxy = -10000;
+    var n = dv.getUint8(offset, true); offset += 1;
+    for (var i = 0; i < n; i++) {
+        var x = dv.getUint16(offset, true); offset += 2;
+        var y = dv.getUint16(offset, true); offset += 2;
+        var padding = dv.getUint16(offset, true); offset += 2;
+
+        var labelLength = dv.getUint8(offset, true); offset += 1;
+        offset += labelLength;
+        var styleLength = dv.getUint8(offset, true); offset += 1;
+        offset += styleLength;
+
+        var p = new this.scope.Point(800 * x / 10000, 800 * y / 10000);
+        if (p.x < minx)
+            minx = p.x;
+        if (p.y < miny)
+            miny = p.y;
+        if (p.x > maxx)
+            maxx = p.x;
+        if (p.y > maxy)
+            maxy = p.y;
+        this.graph.addVertex(p);
+    }
+
+    var e = dv.getUint16(offset, true); offset += 2;
+    for (var i = 0; i < e; i++) {
+        var i1 = dv.getUint8(offset, true); offset += 1;
+        var i2 = dv.getUint8(offset, true); offset += 1;
+        var multiplicity = dv.getUint8(offset, true); offset += 1;
+        var orientation = dv.getUint8(offset, true); offset += 1;
+        var thickness = dv.getUint16(offset, true) / 100; offset += 2;
+
+        var styleLength = dv.getUint8(offset, true); offset += 1;
+        offset += styleLength;
+      
+        this.graph.addEdge(this.graph.vertices[i1], this.graph.vertices[i2]);
+    }
+
+    this.graph.translate(new this.scope.Point(this.scope.view.center.x -  (minx + maxx) / 2, this.scope.view.center.y - (miny + maxy) / 2));
+    this.scope.view.update();
 }
 
 WebGraphs.GraphCanvas.prototype.doFrame = function (event) {

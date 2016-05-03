@@ -53,6 +53,12 @@ WebGraphs.Graph.prototype.translateSelected = function (delta) {
     }, this);
 };
 
+WebGraphs.Graph.prototype.translate = function (delta) {
+    this.vertices.forEach(function (v) {
+        v.translate(delta);
+    }, this);
+};
+
 
 WebGraphs.Graph.prototype.findVertexByShape = function (s) {
     return this.vertices.find(function (v) {

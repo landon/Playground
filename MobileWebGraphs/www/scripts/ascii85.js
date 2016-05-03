@@ -78,7 +78,7 @@ var ascii85 = this.ascii85 = (function () {
         assertOrBadInput((a85text.slice(0, 2) === '<~') && (a85text.slice(-2) === '~>'), 'Invalid initial/final ascii85 characters');
         // kill whitespace, handle special 'z' case
         a85text = a85text.slice(2, -2).replace(/\s/g, '').replace('z', '!!!!!');
-        assertOrBadInput(!(/[^\x21-\x75]/.test(a85text)), 'Input contains out-of-range characters.');
+        assertOrBadInput(!(/[^\x21-\x7A]/.test(a85text)), 'Input contains out-of-range characters.');
         var padding = '\x75\x75\x75\x75\x75'.slice((a85text.length % 5) || 5);
         a85text += padding; // pad with 'u'
         var newchars, out_array = [];

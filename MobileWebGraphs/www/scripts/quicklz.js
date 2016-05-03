@@ -36,26 +36,24 @@ var QLZ = {};
     QLZ.sizeDecompressed = function(source)
     {
         if (QLZ.headerLen(source) == 9)
-            return QLZ.fast_read(source, 5, 4);
+            return source[5] | (source[6] << 8) | (source[7] << 16) | (source[8] << 24);
         else
-            return QLZ.fast_read(source, 2, 1);
+            return source[2];
     };
 
     QLZ.sizeCompressed = function(source)
     {
         if (QLZ.headerLen(source) == 9)
-            return QLZ.fast_read(source, 1, 4);
+            return source[1] | (source[2] << 8) | (source[3] << 16) | (source[4] << 24);
         else
-            return QLZ.fast_read(source, 1, 1);
+            return source[1];
     };
 	
 
-    QLZ.arraycopy = function (aSource, aSourceOffset, aTarget, aTargetOffset, aLength) {
-        aSourceOffset = aSourceOffset || 0;
-        aTargetOffset = aTargetOffset || 0;
-        aLength = aLength || aSource.byteLength;
-        let view = new Uint8Array(aTarget, aTargetOffset);
-        view.set(new Uint8Array(aSource, aSourceOffset, aLength));
+    QLZ.arraycopy = function (s, soff, t, length) {
+        for (var i = 0; i < length; i++) {
+            t[i] = s[soff + i];
+        }
     };
 	
     QLZ.fast_read = function(aaa, i, numbytes) {
@@ -85,7 +83,7 @@ var QLZ = {};
 
         if ((source[0] & 1) != 1) {
             var d2 = new Uint8Array(size);
-            QLZ.arraycopy(source, headerLen(source), d2, 0, size);
+            QLZ.arraycopy(source, src, d2, size);
             return d2;
         }
 
