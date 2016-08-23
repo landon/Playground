@@ -10,7 +10,7 @@ namespace LinearFractionalProgram
     {
         static void Main(string[] args)
         {
-            var c = MakeCodes(20, 2);
+            var c = MakeCodes(6, 1);
         }
 
         static string MakeCodes(int k, int qq)
