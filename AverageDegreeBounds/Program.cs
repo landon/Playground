@@ -10,18 +10,28 @@ namespace AverageDegreeBounds
     {
         static void Main(string[] args)
         {
-            var list = new List<int>() { 4, 5, 6, 7, 8, 9, 10, 15, 20 };
+            var list = new List<int>() { 6, 7, 8, 9, 10, 15, 20 };
 
             foreach (var k in list)
             {
                 if (k <= 6)
-                    Console.WriteLine(k + " : " + NewBoundSmallK(k));
+                    Console.WriteLine(k + " : " + NewerBoundSmallK(k));
                 else
-                    Console.WriteLine(k + " : " + NewBoundSmallK(k));
+                    Console.WriteLine(k + " : " + NewerBoundLargeK(k));
             }
 
 
             Console.ReadKey();
+        }
+
+        static double NewerBoundSmallK(int k)
+        {
+            return 5 + 93.0 / 766.0;
+        }
+
+        static double NewerBoundLargeK(int k)
+        {
+            return k - 1.0 + Math.Pow((k - 3.0), 2) * (2.0*k-3.0) / (Math.Pow(k, 4) - 2.0 * Math.Pow(k, 3) - 11.0 * Math.Pow(k, 2) + 28.0 * k - 14.0);
         }
 
         static double NewBoundSmallK(int k)
