@@ -5,16 +5,44 @@ VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "square", "square.csproj", "{7F0D2447-80A4-4C28-92BF-99FFA268A151}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Choosability", "..\..\..\WebGraphs\Choosability\Choosability.csproj", "{2221B992-6478-462E-A865-EEE305FFCAE4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{39AD7299-3E64-4E30-BD56-A1756E762361}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Another|Any CPU = Another|Any CPU
 		Debug|Any CPU = Debug|Any CPU
+		OneMore|Any CPU = OneMore|Any CPU
 		Release|Any CPU = Release|Any CPU
+		YetAnother|Any CPU = YetAnother|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7F0D2447-80A4-4C28-92BF-99FFA268A151}.Another|Any CPU.ActiveCfg = Release|Any CPU
+		{7F0D2447-80A4-4C28-92BF-99FFA268A151}.Another|Any CPU.Build.0 = Release|Any CPU
 		{7F0D2447-80A4-4C28-92BF-99FFA268A151}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7F0D2447-80A4-4C28-92BF-99FFA268A151}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F0D2447-80A4-4C28-92BF-99FFA268A151}.OneMore|Any CPU.ActiveCfg = Release|Any CPU
+		{7F0D2447-80A4-4C28-92BF-99FFA268A151}.OneMore|Any CPU.Build.0 = Release|Any CPU
 		{7F0D2447-80A4-4C28-92BF-99FFA268A151}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7F0D2447-80A4-4C28-92BF-99FFA268A151}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F0D2447-80A4-4C28-92BF-99FFA268A151}.YetAnother|Any CPU.ActiveCfg = Release|Any CPU
+		{7F0D2447-80A4-4C28-92BF-99FFA268A151}.YetAnother|Any CPU.Build.0 = Release|Any CPU
+		{2221B992-6478-462E-A865-EEE305FFCAE4}.Another|Any CPU.ActiveCfg = Another|Any CPU
+		{2221B992-6478-462E-A865-EEE305FFCAE4}.Another|Any CPU.Build.0 = Another|Any CPU
+		{2221B992-6478-462E-A865-EEE305FFCAE4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2221B992-6478-462E-A865-EEE305FFCAE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2221B992-6478-462E-A865-EEE305FFCAE4}.OneMore|Any CPU.ActiveCfg = OneMore|Any CPU
+		{2221B992-6478-462E-A865-EEE305FFCAE4}.OneMore|Any CPU.Build.0 = OneMore|Any CPU
+		{2221B992-6478-462E-A865-EEE305FFCAE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2221B992-6478-462E-A865-EEE305FFCAE4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2221B992-6478-462E-A865-EEE305FFCAE4}.YetAnother|Any CPU.ActiveCfg = YetAnother|Any CPU
+		{2221B992-6478-462E-A865-EEE305FFCAE4}.YetAnother|Any CPU.Build.0 = YetAnother|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

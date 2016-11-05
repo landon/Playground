@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Numerics;
+using Choosability;
 
 namespace square
 {
@@ -50,6 +51,25 @@ namespace square
                     return i;
                 i++;
             }
+        }
+
+        static bool Is3Colorable(int n, List<Tuple<int, int>> edges)
+        {
+            var A = new bool[n, n];
+            foreach (var e in edges)
+            {
+                A[e.Item1, e.Item2] = true;
+                A[e.Item2, e.Item1] = true;
+            }
+
+            var g = new Graph(A);
+            foreach (var X in g.EnumerateMaximalIndependentSets())
+            {
+                var h = g.InducedSubgraph(g.Vertices.Except(X).ToList());
+                if (h.IsTwoColorable())
+                    return true;
+            }
+            return false;
         }
 
         static int GCD(int a, int b)
