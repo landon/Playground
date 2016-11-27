@@ -50,6 +50,20 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\WebGraphs\Choosability\Choosability.csproj">
+      <Project>{2221b992-6478-462e-a865-eee305ffcae4}</Project>
+      <Name>Choosability</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\WebGraphs\GraphicsLayer\GraphicsLayer.csproj">
+      <Project>{82eb0f02-e510-4446-9d00-423414ec38e4}</Project>
+      <Name>GraphicsLayer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\WebGraphs\GraphsCore\GraphsCore.csproj">
+      <Project>{079b33e9-0150-412b-b94f-08aa0170e580}</Project>
+      <Name>GraphsCore</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

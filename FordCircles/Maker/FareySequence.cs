@@ -22,7 +22,8 @@ namespace Maker
 
             while (a.Top < N)
             {
-                yield return a;
+                var x = new Fraction() { Top = a.Top, Bottom = a.Bottom };
+                yield return x;
 
                 var p = (N + a.Bottom) / b.Bottom * b.Top - a.Top;
                 var q = (N + a.Bottom) / b.Bottom * b.Bottom - a.Bottom;
