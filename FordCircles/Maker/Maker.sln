@@ -1,22 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.40629.0
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Maker", "Maker.csproj", "{8F1B675F-7685-46DA-817B-CB0D3909A5A5}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{17830DD2-2920-45C4-868D-3B09A4246DFD}"
-	ProjectSection(SolutionItems) = preProject
-		.nuget\NuGet.Config = .nuget\NuGet.Config
-		.nuget\NuGet.exe = .nuget\NuGet.exe
-		.nuget\NuGet.targets = .nuget\NuGet.targets
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Choosability", "..\..\..\WebGraphs\Choosability\Choosability.csproj", "{2221B992-6478-462E-A865-EEE305FFCAE4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphsCore", "..\..\..\WebGraphs\GraphsCore\GraphsCore.csproj", "{079B33E9-0150-412B-B94F-08AA0170E580}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphicsLayer", "..\..\..\WebGraphs\GraphicsLayer\GraphicsLayer.csproj", "{82EB0F02-E510-4446-9D00-423414EC38E4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BitLevelGeneration", "..\..\..\WebGraphs\BitLevelGeneration\BitLevelGeneration.csproj", "{FC557259-AF5C-461C-9FAA-B0FB01F1A947}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -67,6 +62,16 @@ Global
 		{82EB0F02-E510-4446-9D00-423414EC38E4}.Release|Any CPU.Build.0 = Release|Any CPU
 		{82EB0F02-E510-4446-9D00-423414EC38E4}.YetAnother|Any CPU.ActiveCfg = YetAnother|Any CPU
 		{82EB0F02-E510-4446-9D00-423414EC38E4}.YetAnother|Any CPU.Build.0 = YetAnother|Any CPU
+		{FC557259-AF5C-461C-9FAA-B0FB01F1A947}.Another|Any CPU.ActiveCfg = Another|Any CPU
+		{FC557259-AF5C-461C-9FAA-B0FB01F1A947}.Another|Any CPU.Build.0 = Another|Any CPU
+		{FC557259-AF5C-461C-9FAA-B0FB01F1A947}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC557259-AF5C-461C-9FAA-B0FB01F1A947}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC557259-AF5C-461C-9FAA-B0FB01F1A947}.OneMore|Any CPU.ActiveCfg = OneMore|Any CPU
+		{FC557259-AF5C-461C-9FAA-B0FB01F1A947}.OneMore|Any CPU.Build.0 = OneMore|Any CPU
+		{FC557259-AF5C-461C-9FAA-B0FB01F1A947}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC557259-AF5C-461C-9FAA-B0FB01F1A947}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FC557259-AF5C-461C-9FAA-B0FB01F1A947}.YetAnother|Any CPU.ActiveCfg = YetAnother|Any CPU
+		{FC557259-AF5C-461C-9FAA-B0FB01F1A947}.YetAnother|Any CPU.Build.0 = YetAnother|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
