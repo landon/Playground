@@ -10,8 +10,8 @@ namespace ConnectFour
         static void Main(string[] args)
         {
             var b = new Board();
-            var player1 = new Human();
-            var player2 = new Simpleton();
+            var player1 = new Simpleton();
+            var player2 = new Human();
 
             PlayGame(player1, player2);
             Console.ReadKey();

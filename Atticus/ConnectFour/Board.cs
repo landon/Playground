@@ -14,6 +14,8 @@ namespace ConnectFour
 
         public void DoMove(Move m)
         {
+            Console.WriteLine("playing " + m.Column);
+            Console.WriteLine();
             Move(B, m.Column, m.Color);
         }
 
@@ -48,9 +50,11 @@ namespace ConnectFour
                     if (dc == 0 && dr == 0)
                         continue;
 
-                    var triple = MakeTriple(column, row, dc, dr);
-                    if (triple.All(IsValid))
-                        yield return triple;
+                    foreach (var triple in MakeTriple(column, row, dc, dr))
+                    {
+                        if (triple.All(IsValid))
+                            yield return triple;
+                    }
 
                 }
             }
@@ -61,13 +65,20 @@ namespace ConnectFour
             return p.Item1 >= 0 && p.Item1 < Columns && p.Item2 >= 0 && p.Item2 < Rows;
         }
 
-        List<Tuple<int, int>> MakeTriple(int column, int row, int dc, int dr)
+        IEnumerable<List<Tuple<int, int>>> MakeTriple(int column, int row, int dc, int dr)
         {
-            return new List<Tuple<int, int>>()
+            yield return new List<Tuple<int, int>>()
             {
                 new Tuple<int, int>(column + dc, row + dr),
                 new Tuple<int, int>(column + 2 * dc, row + 2 * dr),
                 new Tuple<int, int>(column + 3 * dc, row + 3 * dr)
+            };
+
+            yield return new List<Tuple<int, int>>()
+            {
+                new Tuple<int, int>(column - dc, row - dr),
+                new Tuple<int, int>(column + dc, row + dr),
+                new Tuple<int, int>(column + 2 * dc, row + 2 * dr)
             };
         }
 
