@@ -12,10 +12,22 @@ namespace ConnectFour
 
         int[,] B = new int[Columns, Rows];
 
+        public Board Copy()
+        {
+            var b = new Board();
+            for (int row = 0; row < Rows; row++)
+            {
+                for (int column = 0; column < Columns; column++)
+                {
+                    b.B[column, row] = B[column, row];
+                }
+            }
+
+            return b;
+        }
+
         public void DoMove(Move m)
         {
-            Console.WriteLine("playing " + m.Column);
-            Console.WriteLine();
             Move(B, m.Column, m.Color);
         }
 
@@ -81,7 +93,6 @@ namespace ConnectFour
                 new Tuple<int, int>(column + 2 * dc, row + 2 * dr)
             };
         }
-
 
         public void Draw()
         {

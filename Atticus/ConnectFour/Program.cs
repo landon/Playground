@@ -10,7 +10,7 @@ namespace ConnectFour
         static void Main(string[] args)
         {
             var b = new Board();
-            var player1 = new Simpleton();
+            var player1 = new DeepThinker();
             var player2 = new Human();
 
             PlayGame(player1, player2);
@@ -23,12 +23,15 @@ namespace ConnectFour
             b.Draw();
             var color = -1;
             var p = new[] { p1, p2 };
+            var column = -1;
 
             while (true)
             {
-                var column = p[(color + 1) / 2].Move(b, color);
+                column = p[(color + 1) / 2].SelectMove(b, column, color);
                 var m = new Move(column, color);
                 var win = b.IsWinningMove(m);
+                Console.WriteLine("playing " + m.Column);
+                Console.WriteLine();
                 b.DoMove(m);
                 b.Draw();
 

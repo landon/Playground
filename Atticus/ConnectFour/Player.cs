@@ -6,6 +6,6 @@ namespace ConnectFour
 {
     abstract class Player
     {
-        public abstract int Move(Board b, int color);
+        public abstract int SelectMove(Board b, int lastColumn, int color);
     }
 }

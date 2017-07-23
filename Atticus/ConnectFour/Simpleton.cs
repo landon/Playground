@@ -7,20 +7,33 @@ namespace ConnectFour
 {
     class Simpleton : Player
     {
-        Random RNG = new Random(DateTime.Now.Millisecond);
-        public override int Move(Board b, int color)
+        protected Random RNG = new Random(DateTime.Now.Millisecond);
+        public override int SelectMove(Board b, int lastColumn, int color)
         {
-            var possibleMoves = Enumerable.Range(0, 7).Where(column => b.IsLegalMove(new Move(column, color))).ToList();
+            var m = Win(b, color);
+            if (m >= 0)
+                return m;
+            m = Win(b, -color);
+            if (m >= 0)
+                return m;
+            return SelectNonWinningBlockingMove(b, lastColumn, color);
+        }
 
-            if (possibleMoves.Any(column => b.IsWinningMove(new Move(column, color))))
-            {
-                return possibleMoves.First(column => b.IsWinningMove(new Move(column, color)));
-            }
-            if (possibleMoves.Any(column => b.IsWinningMove(new Move(column, -color))))
-            {
-                return possibleMoves.First(column => b.IsWinningMove(new Move(column, -color)));
-            }
+        protected static int Win(Board b, int color)
+        {
+            foreach (var m in PossibleMoves(b).Where(column => b.IsWinningMove(new Move(column, color))))
+                return m;
+            return -1;
+        }
 
+        protected static List<int> PossibleMoves(Board b)
+        {
+            return Enumerable.Range(0, 7).Where(column => b.IsLegalMove(new Move(column, 1))).ToList();
+        }
+
+        protected virtual int SelectNonWinningBlockingMove(Board b, int lastColumn, int color)
+        {
+            var possibleMoves = PossibleMoves(b);
             return possibleMoves[RNG.Next(possibleMoves.Count)];
         }
     }

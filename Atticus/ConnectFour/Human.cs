@@ -7,7 +7,7 @@ namespace ConnectFour
     class Human : Player
     {
         static string Decimals = "0123456789";
-        public override int Move(Board b, int color)
+        public override int SelectMove(Board b, int lastColumn, int color)
         {
             while (true)
             {
