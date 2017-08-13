@@ -71,14 +71,17 @@ namespace Test
         {
             _context.StrokeStyle = argb.ToColor();
             _context.GlobalAlpha = argb.A / 255.0f;
-            _context.LineWidth = width;
-            _context.StrokeRect((int)bounds.X, (int)bounds.Y, (int)bounds.Width, (int)bounds.Height);
+            _context.BeginPath();
+            _context.Arc(bounds.Left + bounds.Width / 2, bounds.Top + bounds.Height / 2, bounds.Width / 2, 0, 2 * Math.PI);
+            _context.Stroke();
         }
         public void FillEllipse(ARGB argb, Box bounds)
         {
+            _context.BeginPath();
             _context.FillStyle = argb.ToColor();
             _context.GlobalAlpha = argb.A / 255.0f;
-            _context.FillRect((int)bounds.X, (int)bounds.Y, (int)bounds.Width, (int)bounds.Height);
+            _context.Arc(bounds.Left + bounds.Width / 2, bounds.Top + bounds.Height / 2, bounds.Width / 2, 0, 2 * Math.PI);
+            _context.Fill();
         }
         public void DrawString(string s, Font font, ARGB argb, Box bounds)
         {

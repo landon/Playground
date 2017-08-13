@@ -11,24 +11,22 @@ namespace Test
     {
         public static void Main()
         {
+           Window.OnLoad += OnWindowLoad;
+        }
+
+        static void OnWindowLoad(Event e)
+        {
             var canvas = new HTMLCanvasElement();
-            canvas.Width = 800;
-            canvas.Height = 600;
+            canvas.Id = "IAmWebGraphs";
+            canvas.Width = (int)(0.7 * Window.InnerWidth);
+            canvas.Height = (int)(1.0 * Window.InnerHeight);
 
-            var v = new Vertex(0.5, 0.1);
-            var w = new Vertex(0.3, 0.5);
-            v.Color = new ARGB(100, 0, 0);
-            w.Color = new ARGB(0, 255, 0);
             var G = new Graph();
-            G.AddVertex(v);
-            G.AddVertex(w);
-            G.AddEdge(v, w);
-
             var graphCanvas = new GraphCanvas(G);
             var tc = new TabCanvas(canvas, graphCanvas);
             tc.Invalidate();
 
-            Document.Body.AppendChild(canvas);
+            Document.Body.FirstElementChild.FirstElementChild.FirstElementChild.FirstElementChild.AppendChild(canvas);
         }
     }
 }

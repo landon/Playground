@@ -83,8 +83,9 @@ namespace Graphs
                     var startAngle = angle + angleStep * (i - evenModifier);
                     var finishAngle = angle - angleStep * (i - evenModifier);
 
-                    var start = LocalToGlobal(new Vector(_V1.X, _V1.Y), width, height);// + Utility.PolarToRectangular(maxRadius1 + 0.01, startAngle), width, height);
-                    var finish = LocalToGlobal(new Vector(_V2.X, _V2.Y), width, height);// - Utility.PolarToRectangular(maxRadius2 + 0.01, finishAngle), width, height);
+                    var start = LocalToGlobal(_V1.Location + Utility.PolarToRectangular(maxRadius1 + 0.01, startAngle), width, height);
+                    var finish = LocalToGlobal(_V2.Location - Utility.PolarToRectangular(maxRadius2 + 0.01, finishAngle), width, height);
+
 
                     if (first)
                     {

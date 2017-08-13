@@ -248,7 +248,7 @@ namespace Graphs
         string _Style;
         bool _IsSelected;
 
-        float _padding = 1.0f / 100.0f;
+        float _padding = 2.0f / 100.0f;
         GraphicsLayer.Box _LocalBounds = GraphicsLayer.Box.Empty;
         bool _showIndex = false;
 

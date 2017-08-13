@@ -59,7 +59,7 @@ namespace Test
         void OnMouseButtonDown(MouseEvent<HTMLCanvasElement> e)
         {
             _ctrlDown = e.CtrlKey;
-            // Canvas.SetCapture(true);
+           // Canvas.SetCapture(true);  // chrome does not seem to support this, what?
 
             if (e.ShiftKey)
             {
@@ -76,10 +76,10 @@ namespace Test
         void OnMouseButtonUp(MouseEvent<HTMLCanvasElement> e)
         {
             _ctrlDown = e.CtrlKey;
-            //Canvas.SetCapture(false);
-
+           // Canvas.SetCapture(false);
             if (e.ShiftKey)
                 return;
+
 
             if (MouseButtonUp != null)
                 MouseButtonUp(e.ClientX, e.ClientY, e.Button == 0 ? MouseButton.Left : MouseButton.Right);
@@ -91,20 +91,10 @@ namespace Test
 
         public void SetClipboardText(string text)
         {
-            try
-            {
-            }
-            catch { }
         }
 
         public string GetClipboardText()
         {
-            try
-            {
-                return "";
-            }
-            catch { }
-
             return "";
         }
 
