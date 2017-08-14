@@ -40,6 +40,21 @@ namespace Test
             Title = name;
         }
 
+        internal void SageManual()
+        {
+            App.TellSage("G = Graph('" + GraphCanvas.Graph.GetEdgeWeights().ToGraph6() + "')" + Environment.NewLine);
+        }
+
+        internal void SageChromaticPolynomial()
+        {
+            App.TellSageAuto("G = Graph('" + GraphCanvas.Graph.GetEdgeWeights().ToGraph6() + "')" + Environment.NewLine + "G.chromatic_polynomial()");
+        }
+
+        internal void SageChromaticNumber()
+        {
+            App.TellSageAuto("G = Graph('" + GraphCanvas.Graph.GetEdgeWeights().ToGraph6() + "')" + Environment.NewLine + "G.chromatic_number()");
+        }
+
         void OnGraphModified(Graph g)
         {
             Invalidate();
@@ -54,7 +69,7 @@ namespace Test
         {
             _ctrlDown = e.CtrlKey;
             if (MouseMoved != null)
-                MouseMoved(e.ClientX, e.ClientY);
+                MouseMoved(e.LayerX, e.LayerY);
         }
 
         void OnMouseButtonDown(MouseEvent<HTMLCanvasElement> e)
@@ -65,12 +80,12 @@ namespace Test
             if (e.ShiftKey)
             {
                 if (MouseButtonDoubleClicked != null)
-                    MouseButtonDoubleClicked(e.ClientX, e.ClientY, e.Button == 0 ? MouseButton.Left : MouseButton.Right);
+                    MouseButtonDoubleClicked(e.LayerX, e.LayerY, e.Button == 0 ? MouseButton.Left : MouseButton.Right);
             }
             else
             {
                 if (MouseButtonDown != null)
-                    MouseButtonDown(e.ClientX, e.ClientY, e.Button == 0 ? MouseButton.Left : MouseButton.Right);
+                    MouseButtonDown(e.LayerX, e.LayerY, e.Button == 0 ? MouseButton.Left : MouseButton.Right);
             }
         }
 
@@ -83,7 +98,7 @@ namespace Test
 
 
             if (MouseButtonUp != null)
-                MouseButtonUp(e.ClientX, e.ClientY, e.Button == 0 ? MouseButton.Left : MouseButton.Right);
+                MouseButtonUp(e.LayerX, e.LayerY, e.Button == 0 ? MouseButton.Left : MouseButton.Right);
 
             if (e.CtrlKey && e.AltKey)
             {

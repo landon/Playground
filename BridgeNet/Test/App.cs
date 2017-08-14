@@ -4,6 +4,7 @@ using Graphs;
 using GraphicsLayer;
 using Newtonsoft.Json;
 using System;
+using Bridge.jQuery2;
 
 namespace Test
 {
@@ -28,11 +29,31 @@ namespace Test
             var tc = new TabCanvas(canvas, graphCanvas);
             tc.Invalidate();
 
-            Document.Body.FirstElementChild.FirstElementChild.FirstElementChild.FirstElementChild.AppendChild(canvas);
-            _sageContainer = Document.Body.FirstElementChild.FirstElementChild.FirstElementChild.Children[1];
+            var container = Document.Body.FirstElementChild;
+            var dividedGrid = container.Children[1];
+            dividedGrid.FirstElementChild.FirstElementChild.AppendChild(canvas);
+            _sageContainer = dividedGrid.FirstElementChild.Children[1];
+
+            jQuery.Select("#SageManual").On("click", () => tc.SageManual());
+            jQuery.Select("#SageChromaticNumber").On("click", () => tc.SageChromaticNumber());
+            jQuery.Select("#SageChromaticPolynomial").On("click", () => tc.SageChromaticPolynomial());
         }
 
         public static void TellSage(string s)
+        {
+            AppendSageDiv(s);
+
+            Script.Write("sagecell.makeSagecell({\"inputLocation\": \"div.compute\", hide: [\"permalink\"], autoeval:false});");
+        }
+
+        public static void TellSageAuto(string s)
+        {
+            AppendSageDiv(s);
+
+            Script.Write("sagecell.makeSagecell({\"inputLocation\": \"div.compute\", hide: [\"permalink\", \"evalButton\", \"fullScreen\", \"editor\"], autoeval:true});");
+        }
+
+        static void AppendSageDiv(string s)
         {
             if (_sageContainer.ChildElementCount > 0)
                 _sageContainer.RemoveChild(_sageContainer.Children[0]);
@@ -40,8 +61,8 @@ namespace Test
             div.ClassName = "compute";
             div.TextContent = s;
             _sageContainer.AppendChild(div);
-
-            Script.Write("sagecell.makeSagecell({\"inputLocation\": \"div.compute\", hide: [\"permalink\"]});");
         }
+
+        
     }
 }

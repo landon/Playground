@@ -181,10 +181,6 @@ namespace Graphs
         }
 
         #region actions
-        public bool Close()
-        {
-            return true;
-        }
 
         public string Save(string name)
         {
