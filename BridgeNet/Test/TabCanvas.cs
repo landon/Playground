@@ -50,6 +50,16 @@ namespace Test
             App.TellSageAuto("G = Graph('" + GraphCanvas.Graph.GetEdgeWeights().ToGraph6() + "')" + Environment.NewLine + "G.chromatic_polynomial()");
         }
 
+        internal void SageGraph6()
+        {
+            App.TellSageAuto("G = Graph('" + GraphCanvas.Graph.GetEdgeWeights().ToGraph6() + "')" + Environment.NewLine + "G.graph6_string()");
+        }
+
+        internal void SageSparse6()
+        {
+            App.TellSageAuto("G = Graph('" + GraphCanvas.Graph.GetEdgeWeights().ToGraph6() + "')" + Environment.NewLine + "G.sparse6_string()");
+        }
+
         internal void SageChromaticNumber()
         {
             App.TellSageAuto("G = Graph('" + GraphCanvas.Graph.GetEdgeWeights().ToGraph6() + "')" + Environment.NewLine + "G.chromatic_number()");
