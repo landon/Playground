@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GraphsCore;
 
 namespace Test
 {
@@ -83,6 +84,11 @@ namespace Test
 
             if (MouseButtonUp != null)
                 MouseButtonUp(e.ClientX, e.ClientY, e.Button == 0 ? MouseButton.Left : MouseButton.Right);
+
+            if (e.CtrlKey && e.AltKey)
+            {
+                App.TellSage("G = Graph('" + GraphCanvas.Graph.GetEdgeWeights().ToGraph6() + "')");
+            }
         }
 
         void OnMouseDoubleClick(MouseEvent<HTMLCanvasElement> e)

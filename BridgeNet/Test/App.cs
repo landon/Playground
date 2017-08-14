@@ -9,6 +9,8 @@ namespace Test
 {
     public class App
     {
+        static HTMLElement _sageContainer;
+
         public static void Main()
         {
            Window.OnLoad += OnWindowLoad;
@@ -27,6 +29,19 @@ namespace Test
             tc.Invalidate();
 
             Document.Body.FirstElementChild.FirstElementChild.FirstElementChild.FirstElementChild.AppendChild(canvas);
+            _sageContainer = Document.Body.FirstElementChild.FirstElementChild.FirstElementChild.Children[1];
+        }
+
+        public static void TellSage(string s)
+        {
+            if (_sageContainer.ChildElementCount > 0)
+                _sageContainer.RemoveChild(_sageContainer.Children[0]);
+            var div = new HTMLDivElement();
+            div.ClassName = "compute";
+            div.TextContent = s;
+            _sageContainer.AppendChild(div);
+
+            Script.Write("sagecell.makeSagecell({\"inputLocation\": \"div.compute\", hide: [\"permalink\"]});");
         }
     }
 }

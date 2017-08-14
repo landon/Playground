@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using MoreLinq;
+using Graphs;
 
 namespace GraphsCore
 {
@@ -81,7 +82,7 @@ namespace GraphsCore
         //public static List<int> GetEdgeWeights(string graph6)
         //{
         //    var chars = graph6.ToCharArray();
-            
+
         //    var bytes = UTF8Encoding.UTF8.GetBytes(chars);
 
         //    var N = bytes[0] - 63;
@@ -97,63 +98,64 @@ namespace GraphsCore
         //    return wp;
         //}
 
-        public static bool[,] GetAdjacencyMatrix(string adjacencyListString)
+        //public static bool[,] GetAdjacencyMatrix(string adjacencyListString)
+        //{
+        //    if (string.IsNullOrEmpty(adjacencyListString))
+        //        return null;
+
+        //    try
+        //    {
+        //        var lines = adjacencyListString.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+
+        //        var adjacencyList = new Dictionary<int, List<int>>();
+        //        foreach (var line in lines.Where(l => l.Contains(":")))
+        //        {
+        //            var chunks = line.Split(':', ',');
+
+        //            adjacencyList[int.Parse(chunks[0])] = chunks.Skip(1).Select(c => int.Parse(c)).ToList();
+        //        }
+
+        //        var min = adjacencyList.Min(kvp => kvp.Key);
+        //        var max = adjacencyList.Max(kvp => kvp.Key);
+        //        var N = max + 1 - min;
+
+        //        var adjacencyMatrix = new bool[N, N];
+
+        //        foreach (var kvp in adjacencyList)
+        //            foreach (var neighbor in kvp.Value)
+        //                adjacencyMatrix[kvp.Key - min, neighbor - min] = true;
+
+        //        return adjacencyMatrix;
+        //    }
+        //    catch { }
+
+        //    return null;
+        //}
+
+        public static string ToGraph6(this Graph g)
         {
-            if (string.IsNullOrEmpty(adjacencyListString))
-                return null;
-
-            try
-            {
-                var lines = adjacencyListString.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
-
-                var adjacencyList = new Dictionary<int, List<int>>();
-                foreach (var line in lines.Where(l => l.Contains(":")))
-                {
-                    var chunks = line.Split(':', ',');
-
-                    adjacencyList[int.Parse(chunks[0])] = chunks.Skip(1).Select(c => int.Parse(c)).ToList();
-                }
-
-                var min = adjacencyList.Min(kvp => kvp.Key);
-                var max = adjacencyList.Max(kvp => kvp.Key);
-                var N = max + 1 - min;
-
-                var adjacencyMatrix = new bool[N, N];
-
-                foreach (var kvp in adjacencyList)
-                    foreach (var neighbor in kvp.Value)
-                        adjacencyMatrix[kvp.Key - min, neighbor - min] = true;
-
-                return adjacencyMatrix;
-            }
-            catch { }
-
-            return null;
+            return g.GetEdgeWeights().ToGraph6();
         }
 
-        //public static string ToGraph6(this Graph g)
-        //{
-        //    return g.GetEdgeWeights().ToGraph6();
-        //}
+        const string ASCII = " !\"#$%&\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
+        public static string ToGraph6(this List<int> w)
+        {
+            var n = (int)((1 + Math.Sqrt(1 + 8 * w.Count)) / 2);
+            if (n > 62)
+                throw new NotImplementedException("i have yet to write/read graph6 files with more than 62 vertices.");
 
-        //public static string ToGraph6(this List<int> w)
-        //{
-        //    var n = (int)((1 + Math.Sqrt(1 + 8 * w.Count)) / 2);
-        //    if (n > 62)
-        //        throw new NotImplementedException("i have yet to write/read graph6 files with more than 62 vertices.");
+            var p = RowToColumnPermutation(n).ToList();
+            var wp = new List<int>(w.Count);
 
-        //    var p = RowToColumnPermutation(n).ToList();
-        //    var wp = new List<int>(w.Count);
+            for (int i = 0; i < p.Count; i++)
+                wp.Add(Math.Abs(w[p.IndexOf(i)]));
 
-        //    for (int i = 0; i < p.Count; i++)
-        //        wp.Add(Math.Abs(w[p.IndexOf(i)]));
+            while (wp.Count % 6 != 0)
+                wp.Add(0);
 
-        //    while (wp.Count % 6 != 0)
-        //        wp.Add(0);
-
-        //    var bb = wp.Batch<int, byte>(6, bits => (byte)(bits.Reverse().Index().Select(pair => pair.Value << pair.Key).Sum() + 63)).Prepend((byte)(n + 63)).ToArray();
-        //    return UTF8Encoding.UTF8.GetString(bb, 0, bb.Length);
-        //}
+            var bb = wp.Batch<int, byte>(6, bits => (byte)(bits.Reverse().Index().Select(pair => pair.Value << pair.Key).Sum() + 63)).Prepend((byte)(n + 63)).ToArray();
+            return string.Join("", bb.Select(b => ASCII[b - 32].ToString()));
+        }
 
         static IEnumerable<int> RowToColumnPermutation(int n)
         {

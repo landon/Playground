@@ -204,31 +204,7 @@ namespace Graphs
             if (Style == null)
                 Style = "";
 
-            var parts = Style.Replace(" ", "").Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries).ToList();
-            parts = parts.Where(p => p != "pre" && p != "post").ToList();
-
-            if (_Orientation == Orientations.Forward)
-            {
-                parts.Add("post");
-            }
-            else if (_Orientation == Orientations.Backward)
-            {
-                parts.Add("pre");
-            }
-
             var sb = new StringBuilder();
-
-            bool isFirst = true;
-            foreach (var p in parts)
-            {
-                if (!isFirst)
-                    sb.Append(", ");
-
-                sb.Append(p);
-
-                isFirst = false;
-            }
-
             Style = sb.ToString();
         }
 
