@@ -25,6 +25,12 @@ namespace Test
 
         static void OnWindowLoad(Event e)
         {
+            jQuery.Document.On("copy", () =>
+            {
+                var tc = _canvasLookup[_currentTabCanvas];
+                tc.GraphCanvas.DoCopy();
+            });
+
             _sageContainer = Document.GetElementById("SageContainer");
             jQuery.Select("#SageManual").On("click", () => _canvasLookup[_currentTabCanvas].SageManual());
             jQuery.Select("#SageChromaticNumber").On("click", () => _canvasLookup[_currentTabCanvas].SageChromaticNumber());
@@ -78,6 +84,7 @@ namespace Test
             canvas.Id = "Webgraph" + _tabID;
             canvas.Width = (int)(Window.InnerWidth);
             canvas.Height = (int)(Window.InnerHeight);
+
             canvas.OnShow += delegate 
             {
                 canvas.Width = canvas.ParentElement.ClientWidth;
@@ -93,7 +100,6 @@ namespace Test
             tabPane.ClassName = "tab-pane active";
             tabPane.Id = "Tab" + _tabID;
             tabPane.AppendChild(canvas);
-
 
             var tabControlContent = Document.GetElementById("TabControlContent");
             foreach (var child in tabControlContent.Children)

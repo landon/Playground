@@ -149,7 +149,9 @@
     <Compile Include="GraphicsLayer\IGraphics.cs" />
     <Compile Include="GraphicsLayer\IPaintable.cs" />
     <Compile Include="GraphicsLayer\IProduceMouseEvents.cs" />
+    <Compile Include="GraphsCore\Ascii85.cs" />
     <Compile Include="GraphsCore\Batch.cs" />
+    <Compile Include="GraphsCore\CompactSerializer.cs" />
     <Compile Include="GraphsCore\Edge.cs" />
     <Compile Include="GraphsCore\Graph.cs" />
     <Compile Include="GraphsCore\GraphCanvas.cs" />

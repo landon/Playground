@@ -281,8 +281,8 @@ namespace Graphs
 
         public void DoCopy(bool verbose = false)
         {
-            //var h =  _graph.InducedSubgraph(_graph.SelectedVertices);
-            //var s = verbose ? h.Serialize() : CompactSerializer.Serialize(h);
+            var h =  _graph.InducedSubgraph(_graph.SelectedVertices);
+            //var s = CompactSerializer.Serialize(h);
 
             //if (!string.IsNullOrEmpty(s))
             //{
