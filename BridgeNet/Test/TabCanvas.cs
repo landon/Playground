@@ -27,7 +27,6 @@ namespace Test
             Canvas.OnMouseDown += OnMouseButtonDown;
             Canvas.OnMouseUp += OnMouseButtonUp;
             Canvas.OnMouseMove += OnMouseMove;
-           
 
             Canvas.OnLoad = OnLoad;
 

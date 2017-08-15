@@ -23,7 +23,7 @@ namespace Test
             Window.OnLoad += OnWindowLoad;
         }
 
-        static void OnWindowLoad(Event e)
+        static void OnWindowLoad(Event eee)
         {
             jQuery.Document.On("copy", () =>
             {
@@ -31,12 +31,16 @@ namespace Test
                 tc.GraphCanvas.DoCopy();
             });
 
+            jQuery.Document.On("keydown", (Action<KeyboardEvent>)OnKeyDown);
+            jQuery.Document.On("contextmenu", ".IAmAGraphCanvas", (Action<Event>)((Event e) => { e.PreventDefault(); }));
+
+
             _sageContainer = Document.GetElementById("SageContainer");
-            jQuery.Select("#SageManual").On("click", () => _canvasLookup[_currentTabCanvas].SageManual());
-            jQuery.Select("#SageChromaticNumber").On("click", () => _canvasLookup[_currentTabCanvas].SageChromaticNumber());
-            jQuery.Select("#SageChromaticPolynomial").On("click", () => _canvasLookup[_currentTabCanvas].SageChromaticPolynomial());
-            jQuery.Select("#SageGraph6").On("click", () => _canvasLookup[_currentTabCanvas].SageGraph6());
-            jQuery.Select("#SageSparse6").On("click", () => _canvasLookup[_currentTabCanvas].SageSparse6());
+            jQuery.Select("#SageManual").On("click", () => CurrentTabCanvas.SageManual());
+            jQuery.Select("#SageChromaticNumber").On("click", () => CurrentTabCanvas.SageChromaticNumber());
+            jQuery.Select("#SageChromaticPolynomial").On("click", () => CurrentTabCanvas.SageChromaticPolynomial());
+            jQuery.Select("#SageGraph6").On("click", () => CurrentTabCanvas.SageGraph6());
+            jQuery.Select("#SageSparse6").On("click", () => CurrentTabCanvas.SageSparse6());
 
             NewTab();
             AddNewSheetTab();
@@ -48,7 +52,7 @@ namespace Test
                 {
                     var d = jQuery.This.ToDynamic();
                     _currentTabCanvas = ee.Target.As<HTMLAnchorElement>().Href;
-                    var canvas = _canvasLookup[_currentTabCanvas].Canvas;
+                    var canvas = CurrentTabCanvas.Canvas;
                     d.tab("show");
                 }
             }));
@@ -81,9 +85,10 @@ namespace Test
                 name = "sheet " + _tabID;
 
             var canvas = new HTMLCanvasElement();
-            canvas.Id = "Webgraph" + _tabID;
+            canvas.Id = "Tab" + _tabID;
             canvas.Width = (int)(Window.InnerWidth);
             canvas.Height = (int)(Window.InnerHeight);
+            canvas.ClassName = "IAmAGraphCanvas";
 
             canvas.OnShow += delegate 
             {
@@ -124,6 +129,48 @@ namespace Test
             tabControl.InsertBefore(tab, _newSheetTab);
 
             _tabID++;
+        }
+
+        public static TabCanvas CurrentTabCanvas { get { return _canvasLookup[_currentTabCanvas]; } }
+
+        static void OnKeyDown(KeyboardEvent e)
+        {
+            var tc = CurrentTabCanvas;
+
+            switch (e.Key)
+            {
+                case "f":
+                    tc.GraphCanvas.DoZoomFit();
+                    break;
+                case "-":
+                    tc.GraphCanvas.DoZoom(-1, new Box(0.5, 0.5));
+                    break;
+                case "+":
+                    tc.GraphCanvas.DoZoom(1, new Box(0.5, 0.5));
+                    break;
+                case "i":
+                    tc.GraphCanvas.ToggleVertexIndices();
+                    break;
+                case "I":
+                    tc.GraphCanvas.RotateVertexIndices();
+                    break;
+                case "j":
+                    tc.GraphCanvas.ToggleEdgeIndices();
+                    break;
+                case "J":
+                    tc.GraphCanvas.RotateEdgeIndices();
+                    break;
+                case "n":
+                    NewTab();
+                    break;
+                case "r":
+                    tc.GraphCanvas.DoReverseSelectedEdges();
+                    break;
+                case "R":
+                    tc.GraphCanvas.DoRotateSelectedEdges();
+                    break;
+
+            }
         }
 
         public static void TellSage(string s)

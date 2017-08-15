@@ -65,7 +65,23 @@ namespace Test
         }
         public void FillPolygon(ARGB argb, IEnumerable<Box> points)
         {
-            DrawLines(argb, points, 3);
+            _context.FillStyle = argb.ToColor();
+            _context.GlobalAlpha = argb.A / 255.0f;
+            _context.BeginPath();
+            var first = true;
+            foreach (var b in points)
+            {
+                if (first)
+                {
+                    _context.MoveTo(b.X, b.Y);
+                    first = false;
+                }
+                else
+                {
+                    _context.LineTo(b.X, b.Y);
+                }
+            }
+            _context.Fill();
         }
         public void DrawEllipse(ARGB argb, Box bounds, double width = 1)
         {
