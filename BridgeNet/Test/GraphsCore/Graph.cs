@@ -157,37 +157,37 @@ namespace Graphs
             _edges = edges.ToList();
         }
 
-        //public Graph(Choosability.Graph g, List<Vector> position, bool directed = true)
-        //    : this()
-        //{
-        //    if (g.VertexWeight != null && g.VertexWeight.Count == g.N)
-        //    {
-        //        _vertices = g.Vertices.Select(v => new Vertex(position[v].X, position[v].Y, g.VertexWeight[v].ToString())).ToList();
-        //    }
-        //    else
-        //    {
-        //        _vertices = g.Vertices.Select(v => new Vertex(position[v].X, position[v].Y)).ToList();
-        //    }
-        //    _edges = new List<Edge>();
+        public Graph(Algorithms.Graph g, List<Vector> position, bool directed = true)
+            : this()
+        {
+            if (g.VertexWeight != null && g.VertexWeight.Count == g.N)
+            {
+                _vertices = g.Vertices.Select(v => new Vertex(position[v].X, position[v].Y, g.VertexWeight[v].ToString())).ToList();
+            }
+            else
+            {
+                _vertices = g.Vertices.Select(v => new Vertex(position[v].X, position[v].Y)).ToList();
+            }
+            _edges = new List<Edge>();
 
-        //    for (int i = 0; i < g.N; i++)
-        //    {
-        //        for (int j = i + 1; j < g.N; j++)
-        //        {
-        //            if (directed)
-        //            {
-        //                if (g.Directed[i, j])
-        //                    _edges.Add(new Edge(_vertices[i], _vertices[j], Edge.Orientations.Forward));
-        //                else if (g.Adjacent[i, j])
-        //                    _edges.Add(new Edge(_vertices[j], _vertices[i], Edge.Orientations.Forward));
-        //            }
-        //            else if (g.Adjacent[i, j])
-        //            {
-        //                _edges.Add(new Edge(_vertices[i], _vertices[j], Edge.Orientations.None));
-        //            }
-        //        }
-        //    }
-        //}
+            for (int i = 0; i < g.N; i++)
+            {
+                for (int j = i + 1; j < g.N; j++)
+                {
+                    if (directed)
+                    {
+                        if (g.Directed[i, j])
+                            _edges.Add(new Edge(_vertices[i], _vertices[j], Edge.Orientations.Forward));
+                        else if (g.Adjacent[i, j])
+                            _edges.Add(new Edge(_vertices[j], _vertices[i], Edge.Orientations.Forward));
+                    }
+                    else if (g.Adjacent[i, j])
+                    {
+                        _edges.Add(new Edge(_vertices[i], _vertices[j], Edge.Orientations.None));
+                    }
+                }
+            }
+        }
 
         public void Paint(GraphicsLayer.IGraphics g, int width, int height)
         {
@@ -195,11 +195,11 @@ namespace Graphs
             {
                 if (ParametersDirty)
                 {
-                    //var graph = new Choosability.Graph(GetEdgeWeights());
-                    //var n = Vertices.Count;
+                    var graph = new Algorithms.Graph(GetEdgeWeights());
+                    var n = Vertices.Count;
 
-                    //for (int i = 0; i < Vertices.Count; i++)
-                    //    Vertices[i].IsUniversal = graph.Degree(i) == n - 1;
+                    for (int i = 0; i < Vertices.Count; i++)
+                        Vertices[i].IsUniversal = graph.Degree(i) == n - 1;
 
                     ParametersDirty = false;
                 }
@@ -284,13 +284,13 @@ namespace Graphs
         
         public Graph Clone()
         {
-            //var s = GraphsCore.CompactSerializer.Serialize(this);
-            //var g = GraphsCore.CompactSerializer.Deserialize(s);
-            //if (g != null)
-            //    g.ParametersDirty = true;
-            //return g;
-
-            return this;
+            var s = GraphsCore.CompactSerializer.Serialize(this);
+            var g = GraphsCore.CompactSerializer.Deserialize(s);
+            if (g != null)
+                g.ParametersDirty = true;
+            else
+                Console.WriteLine("clone is null");
+            return g;
         }
 
         public IHittable HitTest(double x, double y)

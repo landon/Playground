@@ -25,11 +25,22 @@ namespace Test
 
         static void OnWindowLoad(Event eee)
         {
-            jQuery.Document.On("copy", () =>
+            Window.AddEventListener("copy", (Action<Event>)((Event e) =>
             {
+                e.PreventDefault();
                 var tc = _canvasLookup[_currentTabCanvas];
-                tc.GraphCanvas.DoCopy();
-            });
+                var s = tc.GraphCanvas.DoCopy();
+                if (!string.IsNullOrEmpty(s))
+                    e.ToDynamic().clipboardData.setData("Text", s);
+            }));
+
+            Window.AddEventListener("paste", (Action<Event>)((Event e) =>
+            {
+                e.PreventDefault();
+                var s = e.ToDynamic().clipboardData.getData("Text");
+                var tc = _canvasLookup[_currentTabCanvas];
+                tc.GraphCanvas.DoPaste(s ?? "");
+            }));
 
             jQuery.Document.On("keydown", (Action<KeyboardEvent>)OnKeyDown);
             jQuery.Document.On("contextmenu", ".IAmAGraphCanvas", (Action<Event>)((Event e) => { e.PreventDefault(); }));
@@ -168,6 +179,15 @@ namespace Test
                     break;
                 case "R":
                     tc.GraphCanvas.DoRotateSelectedEdges();
+                    break;
+                case "y":
+                    tc.GraphCanvas.DoRedo();
+                    break;
+                case "Y":
+                    tc.GraphCanvas.DoUndo();
+                    break;
+                case "Delete":
+                    tc.GraphCanvas.DoDelete();
                     break;
 
             }

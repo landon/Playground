@@ -126,7 +126,7 @@ namespace Graphs
         {
             _graph = graph != null ? graph : new Graph();
             _secondaryConverter = secondaryConverter;
-           // _history.Add(new HistoricalGraph() { Graph = _graph.Clone(), Zoom = _Zoom, ViewScale = _viewScale });
+            _history.Add(new HistoricalGraph() { Graph = _graph.Clone(), Zoom = _Zoom, ViewScale = _viewScale });
         }
 
         public void Invalidate()
@@ -137,10 +137,11 @@ namespace Graphs
 
         public void GraphChanged()
         {
-            //_history.RemoveRange(_historyIndex + 1, _history.Count - _historyIndex - 1);
+            if (_history.Count - _historyIndex - 1 > 0)
+                _history.RemoveRange(_historyIndex + 1, _history.Count - _historyIndex - 1);
 
-            //_history.Add(new HistoricalGraph() { Graph = _graph.Clone(), Zoom = _Zoom, ViewScale = _viewScale });
-            //_historyIndex = _history.Count - 1;
+            _history.Add(new HistoricalGraph() { Graph = _graph.Clone(), Zoom = _Zoom, ViewScale = _viewScale });
+            _historyIndex = _history.Count - 1;
 
             if (GraphModified != null)
                 GraphModified(Graph);
@@ -293,35 +294,24 @@ namespace Graphs
             DoDelete();
         }
 
-        public void DoCopy(bool verbose = false)
+        public string DoCopy(bool verbose = false)
         {
             var h =  _graph.InducedSubgraph(_graph.SelectedVertices);
-            //var s = CompactSerializer.Serialize(h);
-
-            //if (!string.IsNullOrEmpty(s))
-            //{
-            //    try
-            //    {
-            //        Canvas.SetClipboardText(s);
-            //    }
-            //    catch { }
-            //}
+            return CompactSerializer.Serialize(h);
         }
 
         
-        public void DoPaste()
+        public void DoPaste(string s)
         {
-            var s = Canvas.GetClipboardText() ?? "";
-
             Graph g = null;
             if (s.Contains("tikzpicture"))
             {
                 //g = TeXConverter.FromTikz(s);
             }
-            //else if (CompactSerializer.LooksLikeASerializedGraph(s))
-            //{
-            //    g = CompactSerializer.Deserialize(s);
-            //}
+            else if (CompactSerializer.LooksLikeASerializedGraph(s))
+            {
+                g = CompactSerializer.Deserialize(s);
+            }
             else
             {
                 //g = Graph.Deserialize(s);
@@ -505,50 +495,50 @@ namespace Graphs
       
         public void DoIndexLabeling()
         {
-            //var g = new Choosability.Graph(_graph.GetEdgeWeights());
+            var g = new Algorithms.Graph(_graph.GetEdgeWeights());
 
-            //for (int i = 0; i < _graph.Vertices.Count; i++)
-            //    _graph.Vertices[i].Label = i.ToString();
+            for (int i = 0; i < _graph.Vertices.Count; i++)
+                _graph.Vertices[i].Label = i.ToString();
 
-            //Invalidate();
+            Invalidate();
             GraphChanged();
         }
         public void DoDegreeLabeling()
         {
-            //var g = new Choosability.Graph(_graph.GetEdgeWeights());
+            var g = new Algorithms.Graph(_graph.GetEdgeWeights());
 
-            //for (int i = 0; i < _graph.Vertices.Count; i++)
-            //    _graph.Vertices[i].Label = g.Degree(i).ToString();
+            for (int i = 0; i < _graph.Vertices.Count; i++)
+                _graph.Vertices[i].Label = g.Degree(i).ToString();
 
             Invalidate();
             GraphChanged();
         }
         public void DoInDegreeLabeling()
         {
-            //var g = new Choosability.Graph(_graph.GetEdgeWeights());
+            var g = new Algorithms.Graph(_graph.GetEdgeWeights());
 
-            //for (int i = 0; i < _graph.Vertices.Count; i++)
-            //    _graph.Vertices[i].Label = g.InDegree(i).ToString();
+            for (int i = 0; i < _graph.Vertices.Count; i++)
+                _graph.Vertices[i].Label = g.InDegree(i).ToString();
 
             Invalidate();
             GraphChanged();
         }
         public void DoOutDegreeLabeling()
         {
-            //var g = new Choosability.Graph(_graph.GetEdgeWeights());
+            var g = new Algorithms.Graph(_graph.GetEdgeWeights());
 
-            //for (int i = 0; i < _graph.Vertices.Count; i++)
-            //    _graph.Vertices[i].Label = g.OutDegree(i).ToString();
+            for (int i = 0; i < _graph.Vertices.Count; i++)
+                _graph.Vertices[i].Label = g.OutDegree(i).ToString();
 
             Invalidate();
             GraphChanged();
         }
         public void DoOutDegreePlusOneLabeling()
         {
-            //var g = new Choosability.Graph(_graph.GetEdgeWeights());
+            var g = new Algorithms.Graph(_graph.GetEdgeWeights());
 
-            //for (int i = 0; i < _graph.Vertices.Count; i++)
-            //    _graph.Vertices[i].Label = (g.OutDegree(i) + 1).ToString();
+            for (int i = 0; i < _graph.Vertices.Count; i++)
+                _graph.Vertices[i].Label = (g.OutDegree(i) + 1).ToString();
 
             Invalidate();
             GraphChanged();
