@@ -110,7 +110,7 @@ namespace Graphs
         int _historyIndex = 0;
 
         static readonly ARGB SelectionPenColor = new ARGB(0, 0, 255);
-        static readonly ARGB GridPenColor = new ARGB(50, 0, 10, 0);
+        static readonly ARGB GridPenColor = new ARGB(75, 0, 10, 0);
 
         enum States
         {
