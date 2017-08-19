@@ -1251,8 +1251,12 @@ namespace Test
         {
             var a = await App.AskSageAsync("G = graphs." + name + "()" + Environment.NewLine + "G.adjacency_matrix().str()");
             var layout = await App.AskSageAsync("G = graphs." + name + "()" + Environment.NewLine + "G.layout()");
-            Console.WriteLine(a);
-            Console.WriteLine(layout);
+            var positions = Scale(ExtractPoints(layout));
+            var adj = ParseAdjacencyMatrix(a);
+
+            var g = new Algorithms.Graph(adj);
+
+            App.NewTab(name, new Graphs.Graph(g, positions, false));
         }
         #endregion
 
@@ -1394,13 +1398,42 @@ namespace Test
             var i = 0;
             while (true)
             {
-                i = x.IndexOf("[", i);
-                if (i < 0) break;
-                var p = x.Substring(i, x.IndexOf("]", i) - i).Split(',');
-                yield return new Vector(double.Parse(p[0].Trim('[', ']')), double.Parse(p[1].Trim('[', ']')));
-                i = x.IndexOf("]", i);
-                if (i < 0) break;
+                var j = x.IndexOf("[", i);
+                if (j < 0)
+                {
+                    j = x.IndexOf("(", i);
+                    if (j < 0)
+                        break;
+                }
+                i = j;
+
+                j = x.IndexOf("]", i);
+                if (j < 0)
+                {
+                    j = x.IndexOf(")", i);
+                    if (j < 0)
+                        break;
+                }
+                var p = x.Substring(i, j - i).Split(',');
+                yield return new Vector(double.Parse(p[0].Trim('[', ']', '(', ')')), double.Parse(p[1].Trim('[', ']', '(', ')')));
+                i = j;
             }
+        }
+
+        static bool[,] ParseAdjacencyMatrix(string a)
+        {
+            var bits = a.Replace("'", "").Split(new[] { ",", "\\\\n", "[", "]", " " }, StringSplitOptions.RemoveEmptyEntries);
+            var n = (int)Math.Sqrt(bits.Length);
+            var adj = new bool[n, n];
+
+            var i = 0;
+            foreach (var b in bits)
+            {
+                adj[i / n, i % n] = b == "1";
+                i++;
+            }
+
+            return adj;
         }
     }
 }

@@ -203,7 +203,7 @@ namespace Test
             tabControl.AppendChild(_newSheetTab);
         }
 
-        public static void NewTab(string name = null)
+        public static void NewTab(string name = null, Graph G = null)
         {
             if (string.IsNullOrEmpty(name))
                 name = "sheet " + _tabID;
@@ -220,7 +220,8 @@ namespace Test
                 canvas.Height = canvas.ParentElement.ClientHeight;
             };
 
-            var G = new Graph();
+            if (G == null)
+                G = new Graph();
             var graphCanvas = new GraphCanvas(G);
             var tc = new TabCanvas(canvas, graphCanvas);
             tc.Invalidate();
