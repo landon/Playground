@@ -157,6 +157,11 @@ namespace Test
             jQuery.Select("#SageLayoutGraphViz").On("click", () => CurrentTabCanvas.SageLayoutGraphviz());
             jQuery.Select("#SageLayoutPlanar").On("click", () => CurrentTabCanvas.SageLayoutPlanar());
             #endregion
+
+            jQuery.Select(".NamedGraph").On("click", (Action<Event>)((Event ee) =>
+            {
+                CurrentTabCanvas.SageLoadNamedGraph(((HTMLElement)ee.CurrentTarget).TextContent);
+            }));
             #endregion
 
 
@@ -318,11 +323,11 @@ namespace Test
             return await App.AskSageAsync("G = Graph('" + G.GetEdgeWeights().ToGraph6() + "')" + Environment.NewLine + sageCodeAboutG);
         }
 
-        public static async Task<string> AskSageAsync(string s)
+        public static async Task<string> AskSageAsync(string sageCode)
         {
             var output = Document.GetElementById("SageSecretOutputHole");
             output.TextContent = "working";
-            AppendSageDiv(s);
+            AppendSageDiv(sageCode);
 
             Script.Write("sagecell.makeSagecell({\"inputLocation\": \"div.compute\", hide: [\"permalink\", \"evalButton\", \"fullScreen\", \"editor\"], autoeval:true, outputLocation:\"#SageSecretOutputHole\"});");
 

@@ -258,6 +258,9 @@ namespace Test
         {
             App.AskSageAuto("G = Graph('" + GraphCanvas.Graph.GetEdgeWeights().ToGraph6() + "')" + Environment.NewLine + "G.is_asteroidal_triple_free()");
         }
+
+      
+
         internal void SageIsBiconnected()
         {
             App.AskSageAuto("G = Graph('" + GraphCanvas.Graph.GetEdgeWeights().ToGraph6() + "')" + Environment.NewLine + "G.is_biconnected()");
@@ -1201,49 +1204,71 @@ namespace Test
         internal async void SageLayoutSpring()
         {
             var layout = await App.AskSageAsync(GraphCanvas.Graph, "G.layout_spring()");
-            var positions = ExtractPoints(layout).Select(v => new Vector(0.5 + v.X / 2, 0.5 + v.Y / 2)).ToList();
+            var positions = Scale(ExtractPoints(layout));
             await LayoutGraph(positions);
         }
 
         internal async void SageLayoutRanked()
         {
             var layout = await App.AskSageAsync(GraphCanvas.Graph, "G.layout_ranked()");
-            var positions = ExtractPoints(layout).Select(v => new Vector(0.5 + v.X / 2, 0.5 + v.Y / 2)).ToList();
+            var positions = Scale(ExtractPoints(layout));
             await LayoutGraph(positions);
         }
         internal async void SageLayoutExtendRandomly()
         {
             var layout = await App.AskSageAsync(GraphCanvas.Graph, "G.layout_extend_randomly()");
-            var positions = ExtractPoints(layout).Select(v => new Vector(0.5 + v.X / 2, 0.5 + v.Y / 2)).ToList();
+            var positions = Scale(ExtractPoints(layout));
             await LayoutGraph(positions);
         }
         internal async void SageLayoutCircular()
         {
             var layout = await App.AskSageAsync(GraphCanvas.Graph, "G.layout_circular()");
-            var positions = ExtractPoints(layout).Select(v => new Vector(0.5 + v.X / 2, 0.5 + v.Y / 2)).ToList();
+            var positions = Scale(ExtractPoints(layout));
             await LayoutGraph(positions);
         }
         internal async void SageLayoutTree()
         {
             var layout = await App.AskSageAsync(GraphCanvas.Graph, "G.layout_tree()");
-            var positions = ExtractPoints(layout).Select(v => new Vector(0.5 + v.X / 2, 0.5 + v.Y / 2)).ToList();
+            var positions = Scale(ExtractPoints(layout));
             await LayoutGraph(positions);
         }
         internal async void SageLayoutGraphviz()
         {
             var layout = await App.AskSageAsync(GraphCanvas.Graph, "G.layout_graphviz()");
-            var positions = ExtractPoints(layout).Select(v => new Vector(0.5 + v.X / 2, 0.5 + v.Y / 2)).ToList();
+            var positions = Scale(ExtractPoints(layout));
             await LayoutGraph(positions);
         }
 
         internal async void SageLayoutPlanar()
         {
             var layout = await App.AskSageAsync(GraphCanvas.Graph, "G.layout_planar()");
-            var positions = ExtractPoints(layout).Select(v => new Vector(0.5 + v.X / 2, 0.5 + v.Y / 2)).ToList();
+            var positions = Scale(ExtractPoints(layout));
             await LayoutGraph(positions);
         }
         #endregion
+
+        internal async void SageLoadNamedGraph(string name)
+        {
+            var a = await App.AskSageAsync("G = graphs." + name + "()" + Environment.NewLine + "G.adjacency_matrix().str()");
+            var layout = await App.AskSageAsync("G = graphs." + name + "()" + Environment.NewLine + "G.layout()");
+            Console.WriteLine(a);
+            Console.WriteLine(layout);
+        }
         #endregion
+
+        List<Vector> Scale(IEnumerable<Vector> positions)
+        {
+            var l = positions.ToList();
+            var minX = l.Min(p => p.X);
+            var minY = l.Min(p => p.Y);
+            var maxX = l.Max(p => p.X);
+            var maxY = l.Max(p => p.Y);
+
+            var w = maxX - minX;
+            var h = maxY - minY;
+
+            return positions.Select(p => new Vector(0.1 + 0.8 * (p.X - minX) / w, 0.1 + 0.8 * (p.Y - minY) / h)).ToList();
+        }
 
         async Task LayoutGraph(List<Vector> positions)
         {
