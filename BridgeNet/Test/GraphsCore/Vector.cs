@@ -5,7 +5,7 @@ using GraphicsLayer;
 
 namespace Graphs
 {
-    public struct Vector
+    public class Vector
     {
         public Vector(double x, double y)
         {

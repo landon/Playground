@@ -27,7 +27,7 @@ namespace Graphs
 
         bool _zoomFitNextPaint;
         bool _snapToGrid = true;
-        double _gridStep = 0.05;
+        public static double _gridStep = 0.04;
         bool _drawGrid = true;
         public bool SnapToGrid { get { return _snapToGrid; } set { var needRedraw = value && !_snapToGrid; _snapToGrid = value; if (needRedraw) Invalidate(); } }
         public double GridStep { get { return _gridStep; } set { var needRedraw = SnapToGrid && value != _gridStep; _gridStep = value; if (needRedraw) Invalidate(); } }

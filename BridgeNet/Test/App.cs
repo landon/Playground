@@ -6,6 +6,9 @@ using Newtonsoft.Json;
 using System;
 using Bridge.jQuery2;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Linq;
+using GraphsCore;
 
 namespace Test
 {
@@ -27,7 +30,8 @@ namespace Test
         {
             Window.AddEventListener("copy", (Action<Event>)((Event e) =>
             {
-                e.PreventDefault();
+                if ((e.Target is HTMLSpanElement) || (e.Target is HTMLAnchorElement))
+                    e.PreventDefault();
                 var tc = _canvasLookup[_currentTabCanvas];
                 var s = tc.GraphCanvas.DoCopy();
                 if (!string.IsNullOrEmpty(s))
@@ -52,51 +56,21 @@ namespace Test
             jQuery.Select("#SageSparse6").On("click", () => CurrentTabCanvas.SageSparse6());
             jQuery.Select("#SageChromaticNumber").On("click", () => CurrentTabCanvas.SageChromaticNumber());
             jQuery.Select("#SageChromaticPolynomial").On("click", () => CurrentTabCanvas.SageChromaticPolynomial());
-            jQuery.Select("#SageChromaticQuasisymmetricFunction").On("click", () => CurrentTabCanvas.SageChromaticQuasisymmetricFunction());
-            jQuery.Select("#SageChromaticSymmetricFunction").On("click", () => CurrentTabCanvas.SageChromaticSymmetricFunction());
             jQuery.Select("#SageColoring").On("click", () => CurrentTabCanvas.SageColoring());
-            jQuery.Select("#SageConvexityProperties").On("click", () => CurrentTabCanvas.SageConvexityProperties());
-            jQuery.Select("#SageHasHomomorphismTo").On("click", () => CurrentTabCanvas.SageHasHomomorphismTo());
             jQuery.Select("#SageIndependentSet").On("click", () => CurrentTabCanvas.SageIndependentSet());
-            jQuery.Select("#SageIndependentSetOfRepresentatives").On("click", () => CurrentTabCanvas.SageIndependentSetOfRepresentatives());
             jQuery.Select("#SageIsPerfect").On("click", () => CurrentTabCanvas.SageIsPerfect());
             jQuery.Select("#SageMatchingPolynomial").On("click", () => CurrentTabCanvas.SageMatchingPolynomial());
-            jQuery.Select("#SageMinor").On("click", () => CurrentTabCanvas.SageMinor());
             jQuery.Select("#SagePathwidth").On("click", () => CurrentTabCanvas.SagePathwidth());
-            jQuery.Select("#SageRankDecomposition").On("click", () => CurrentTabCanvas.SageRankDecomposition());
-            jQuery.Select("#SageTopologicalMinor").On("click", () => CurrentTabCanvas.SageTopologicalMinor());
             jQuery.Select("#SageTreewidth").On("click", () => CurrentTabCanvas.SageTreewidth());
             jQuery.Select("#SageTuttePolynomial").On("click", () => CurrentTabCanvas.SageTuttePolynomial());
             jQuery.Select("#SageVertexCover").On("click", () => CurrentTabCanvas.SageVertexCover());
-            jQuery.Select("#SageBipartiteColor").On("click", () => CurrentTabCanvas.SageBipartiteColor());
-            jQuery.Select("#SageBipartiteSets").On("click", () => CurrentTabCanvas.SageBipartiteSets());
-            jQuery.Select("#SageGraph6String").On("click", () => CurrentTabCanvas.SageGraph6String());
-            jQuery.Select("#SageIsDirected").On("click", () => CurrentTabCanvas.SageIsDirected());
-            jQuery.Select("#SageJoin").On("click", () => CurrentTabCanvas.SageJoin());
-            jQuery.Select("#SageSparse6String").On("click", () => CurrentTabCanvas.SageSparse6String());
-            jQuery.Select("#SageToDirected").On("click", () => CurrentTabCanvas.SageToDirected());
-            jQuery.Select("#SageToUndirected").On("click", () => CurrentTabCanvas.SageToUndirected());
-            jQuery.Select("#SageWriteToEps").On("click", () => CurrentTabCanvas.SageWriteToEps());
             jQuery.Select("#SageCliqueComplex").On("click", () => CurrentTabCanvas.SageCliqueComplex());
             jQuery.Select("#SageCliqueMaximum").On("click", () => CurrentTabCanvas.SageCliqueMaximum());
             jQuery.Select("#SageCliqueNumber").On("click", () => CurrentTabCanvas.SageCliqueNumber());
             jQuery.Select("#SageCliquePolynomial").On("click", () => CurrentTabCanvas.SageCliquePolynomial());
-            jQuery.Select("#SageCliquesContainingVertex").On("click", () => CurrentTabCanvas.SageCliquesContainingVertex());
-            jQuery.Select("#SageCliquesGetCliqueBipartite").On("click", () => CurrentTabCanvas.SageCliquesGetCliqueBipartite());
-            jQuery.Select("#SageCliquesGetMaxCliqueGraph").On("click", () => CurrentTabCanvas.SageCliquesGetMaxCliqueGraph());
-            jQuery.Select("#SageCliquesMaximal").On("click", () => CurrentTabCanvas.SageCliquesMaximal());
-            jQuery.Select("#SageCliquesMaximum").On("click", () => CurrentTabCanvas.SageCliquesMaximum());
-            jQuery.Select("#SageCliquesNumberOf").On("click", () => CurrentTabCanvas.SageCliquesNumberOf());
-            jQuery.Select("#SageCliquesVertexCliqueNumber").On("click", () => CurrentTabCanvas.SageCliquesVertexCliqueNumber());
-            jQuery.Select("#SageBoundedOutdegreeOrientation").On("click", () => CurrentTabCanvas.SageBoundedOutdegreeOrientation());
             jQuery.Select("#SageBridges").On("click", () => CurrentTabCanvas.SageBridges());
-            jQuery.Select("#SageDegreeConstrainedSubgraph").On("click", () => CurrentTabCanvas.SageDegreeConstrainedSubgraph());
             jQuery.Select("#SageGomoryHuTree").On("click", () => CurrentTabCanvas.SageGomoryHuTree());
-            jQuery.Select("#SageMinimumOutdegreeOrientation").On("click", () => CurrentTabCanvas.SageMinimumOutdegreeOrientation());
-            jQuery.Select("#SageOrientations").On("click", () => CurrentTabCanvas.SageOrientations());
             jQuery.Select("#SageRandomSpanningTree").On("click", () => CurrentTabCanvas.SageRandomSpanningTree());
-            jQuery.Select("#SageSpanningTrees").On("click", () => CurrentTabCanvas.SageSpanningTrees());
-            jQuery.Select("#SageStrongOrientation").On("click", () => CurrentTabCanvas.SageStrongOrientation());
             jQuery.Select("#SageApexVertices").On("click", () => CurrentTabCanvas.SageApexVertices());
             jQuery.Select("#SageIsApex").On("click", () => CurrentTabCanvas.SageIsApex());
             jQuery.Select("#SageIsArcTransitive").On("click", () => CurrentTabCanvas.SageIsArcTransitive());
@@ -124,19 +98,68 @@ namespace Test
             jQuery.Select("#SageIsTriangleFree").On("click", () => CurrentTabCanvas.SageIsTriangleFree());
             jQuery.Select("#SageIsWeaklyChordal").On("click", () => CurrentTabCanvas.SageIsWeaklyChordal());
             jQuery.Select("#SageOddGirth").On("click", () => CurrentTabCanvas.SageOddGirth());
-            jQuery.Select("#SageCores").On("click", () => CurrentTabCanvas.SageCores());
             jQuery.Select("#SageFractionalChromaticIndex").On("click", () => CurrentTabCanvas.SageFractionalChromaticIndex());
             jQuery.Select("#SageHasPerfectMatching").On("click", () => CurrentTabCanvas.SageHasPerfectMatching());
-            jQuery.Select("#SageIharaZetaFunctionInverse").On("click", () => CurrentTabCanvas.SageIharaZetaFunctionInverse());
             jQuery.Select("#SageKirchhoffSymanzikPolynomial").On("click", () => CurrentTabCanvas.SageKirchhoffSymanzikPolynomial());
             jQuery.Select("#SageLovaszTheta").On("click", () => CurrentTabCanvas.SageLovaszTheta());
-            jQuery.Select("#SageMagnitudeFunction").On("click", () => CurrentTabCanvas.SageMagnitudeFunction());
             jQuery.Select("#SageMatching").On("click", () => CurrentTabCanvas.SageMatching());
             jQuery.Select("#SageMaximumAverageDegree").On("click", () => CurrentTabCanvas.SageMaximumAverageDegree());
-            jQuery.Select("#SageModularDecomposition").On("click", () => CurrentTabCanvas.SageModularDecomposition());
-            jQuery.Select("#SagePerfectMatchings").On("click", () => CurrentTabCanvas.SagePerfectMatchings());
             jQuery.Select("#SageSeidelAdjacencyMatrix").On("click", () => CurrentTabCanvas.SageSeidelAdjacencyMatrix());
+            jQuery.Select("#SageNetworkxGraph").On("click", () => CurrentTabCanvas.SageNetworkxGraph());
+            jQuery.Select("#SageAdjacencyMatrix").On("click", () => CurrentTabCanvas.SageAdjacencyMatrix());
+            jQuery.Select("#SageIncidenceMatrix").On("click", () => CurrentTabCanvas.SageIncidenceMatrix());
+            jQuery.Select("#SageDistanceMatrix").On("click", () => CurrentTabCanvas.SageDistanceMatrix());
+            jQuery.Select("#SageKirchhoffMatrix").On("click", () => CurrentTabCanvas.SageKirchhoffMatrix());
+            jQuery.Select("#SageDensity").On("click", () => CurrentTabCanvas.SageDensity());
+            jQuery.Select("#SageOrder").On("click", () => CurrentTabCanvas.SageOrder());
+            jQuery.Select("#SageSize").On("click", () => CurrentTabCanvas.SageSize());
+            jQuery.Select("#SageAverageDegree").On("click", () => CurrentTabCanvas.SageAverageDegree());
+            jQuery.Select("#SageDegreeSequence").On("click", () => CurrentTabCanvas.SageDegreeSequence());
+            jQuery.Select("#SageCycleBasis").On("click", () => CurrentTabCanvas.SageCycleBasis());
+            jQuery.Select("#SageAllPaths").On("click", () => CurrentTabCanvas.SageAllPaths());
+            jQuery.Select("#SageTrianglesCount").On("click", () => CurrentTabCanvas.SageTrianglesCount());
+            jQuery.Select("#SageSpectrum").On("click", () => CurrentTabCanvas.SageSpectrum());
+            jQuery.Select("#SageEigenvectors").On("click", () => CurrentTabCanvas.SageEigenvectors());
+            jQuery.Select("#SageEigenspaces").On("click", () => CurrentTabCanvas.SageEigenspaces());
+            jQuery.Select("#SageAutomorphismGroup").On("click", () => CurrentTabCanvas.SageAutomorphismGroup());
+            jQuery.Select("#SageIsVertexTransitive").On("click", () => CurrentTabCanvas.SageIsVertexTransitive());
+            jQuery.Select("#SageCanonicalLabel").On("click", () => CurrentTabCanvas.SageCanonicalLabel());
+            jQuery.Select("#SageIsCayley").On("click", () => CurrentTabCanvas.SageIsCayley());
+            jQuery.Select("#SageIsEulerian").On("click", () => CurrentTabCanvas.SageIsEulerian());
+            jQuery.Select("#SageIsPlanar").On("click", () => CurrentTabCanvas.SageIsPlanar());
+            jQuery.Select("#SageIsRegular").On("click", () => CurrentTabCanvas.SageIsRegular());
+            jQuery.Select("#SageIsChordal").On("click", () => CurrentTabCanvas.SageIsChordal());
+            jQuery.Select("#SageIsCirculant").On("click", () => CurrentTabCanvas.SageIsCirculant());
+            jQuery.Select("#SageIsInterval").On("click", () => CurrentTabCanvas.SageIsInterval());
+            jQuery.Select("#SageIsGallaiTree").On("click", () => CurrentTabCanvas.SageIsGallaiTree());
+            jQuery.Select("#SageIsClique").On("click", () => CurrentTabCanvas.SageIsClique());
+            jQuery.Select("#SageIsCycle").On("click", () => CurrentTabCanvas.SageIsCycle());
+            jQuery.Select("#SageIsIndependentSet").On("click", () => CurrentTabCanvas.SageIsIndependentSet());
+            jQuery.Select("#SageIsTransitivelyReduced").On("click", () => CurrentTabCanvas.SageIsTransitivelyReduced());
+            jQuery.Select("#SageIsEquitable").On("click", () => CurrentTabCanvas.SageIsEquitable());
+            jQuery.Select("#SageEccentricity").On("click", () => CurrentTabCanvas.SageEccentricity());
+            jQuery.Select("#SageRadius").On("click", () => CurrentTabCanvas.SageRadius());
+            jQuery.Select("#SageDiameter").On("click", () => CurrentTabCanvas.SageDiameter());
+            jQuery.Select("#SageGirth").On("click", () => CurrentTabCanvas.SageGirth());
+            jQuery.Select("#SageEdgeConnectivity").On("click", () => CurrentTabCanvas.SageEdgeConnectivity());
+            jQuery.Select("#SageVertexConnectivity").On("click", () => CurrentTabCanvas.SageVertexConnectivity());
+            jQuery.Select("#SageIsHamiltonian").On("click", () => CurrentTabCanvas.SageIsHamiltonian());
+            jQuery.Select("#SageCharacteristicPolynomial").On("click", () => CurrentTabCanvas.SageCharacteristicPolynomial());
+            jQuery.Select("#SageGenus").On("click", () => CurrentTabCanvas.SageGenus());
+
+
+            #region Layout
+            jQuery.Select("#SageLayoutSprings").On("click", () => CurrentTabCanvas.SageLayoutSpring());
+            jQuery.Select("#SageLayoutRanked").On("click", () => CurrentTabCanvas.SageLayoutRanked());
+            jQuery.Select("#SageLayoutRandom").On("click", () => CurrentTabCanvas.SageLayoutExtendRandomly());
+            jQuery.Select("#SageLayoutCircular").On("click", () => CurrentTabCanvas.SageLayoutCircular());
+            jQuery.Select("#SageLayoutTree").On("click", () => CurrentTabCanvas.SageLayoutTree());
+            jQuery.Select("#SageLayoutGraphViz").On("click", () => CurrentTabCanvas.SageLayoutGraphviz());
+            jQuery.Select("#SageLayoutPlanar").On("click", () => CurrentTabCanvas.SageLayoutPlanar());
             #endregion
+            #endregion
+
+
 
             NewTab();
             AddNewSheetTab();
@@ -256,9 +279,6 @@ namespace Test
                 case "J":
                     tc.GraphCanvas.RotateEdgeIndices();
                     break;
-                case "n":
-                    NewTab();
-                    break;
                 case "r":
                     tc.GraphCanvas.DoReverseSelectedEdges();
                     break;
@@ -266,27 +286,26 @@ namespace Test
                     tc.GraphCanvas.DoRotateSelectedEdges();
                     break;
                 case "y":
-                    tc.GraphCanvas.DoRedo();
+                    if (e.CtrlKey)
+                        tc.GraphCanvas.DoRedo();
                     break;
-                case "Y":
-                    tc.GraphCanvas.DoUndo();
-                    break;
-                case "Delete":
-                    tc.GraphCanvas.DoDelete();
+                case "z":
+                    if (e.CtrlKey)
+                        tc.GraphCanvas.DoUndo();
                     break;
 
             }
         }
 
-        public static void TellSage(string s)
+        public static void AskSage(string s)
         {
-            AppendSageDiv(s);
+            var div = AppendSageDiv(s);
 
             Script.Write("sagecell.makeSagecell({\"inputLocation\": \"div.compute\", hide: [\"permalink\", \"fullScreen\"], autoeval:false});");
             Script.Write("$(\"#SageModal\").modal('show');");
         }
 
-        public static void TellSageAuto(string s)
+        public static void AskSageAuto(string s)
         {
             AppendSageDiv(s);
 
@@ -294,7 +313,37 @@ namespace Test
             Script.Write("$(\"#SageModal\").modal('show');");
         }
 
-        static void AppendSageDiv(string s)
+        public static async Task<string> AskSageAsync(Graph G, string sageCodeAboutG)
+        {
+            return await App.AskSageAsync("G = Graph('" + G.GetEdgeWeights().ToGraph6() + "')" + Environment.NewLine + sageCodeAboutG);
+        }
+
+        public static async Task<string> AskSageAsync(string s)
+        {
+            var output = Document.GetElementById("SageSecretOutputHole");
+            output.TextContent = "working";
+            AppendSageDiv(s);
+
+            Script.Write("sagecell.makeSagecell({\"inputLocation\": \"div.compute\", hide: [\"permalink\", \"evalButton\", \"fullScreen\", \"editor\"], autoeval:true, outputLocation:\"#SageSecretOutputHole\"});");
+
+            while (!output.TextContent.Contains("Accepted:"))
+                await Task.Delay(100);
+
+            var response = output.TextContent;
+            if (string.IsNullOrEmpty(response))
+                return "flibble";
+
+            var ss = response.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries).FirstOrDefault(line => line.Contains("Accepted:"));
+            if (string.IsNullOrEmpty(ss))
+                return "flabble";
+
+            ss = ss.Substring(ss.IndexOf("text/plain") + "text/plain".Length + 3);
+            ss = ss.Substring(0, ss.IndexOf("\""));
+
+            return ss;
+        }
+
+        static HTMLDivElement AppendSageDiv(string s)
         {
             if (_sageContainer.ChildElementCount > 0)
                 _sageContainer.RemoveChild(_sageContainer.Children[0]);
@@ -302,8 +351,8 @@ namespace Test
             div.ClassName = "compute";
             div.TextContent = s;
             _sageContainer.AppendChild(div);
-        }
 
-        
+            return div;
+        }
     }
 }
