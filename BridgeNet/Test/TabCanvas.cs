@@ -218,7 +218,7 @@ namespace Test
         }
         internal void SageGomoryHuTree()
         {
-            App.AskSageAuto("G = Graph('" + GraphCanvas.Graph.GetEdgeWeights().ToGraph6() + "')" + Environment.NewLine + "G.gomory_hu_tree()");
+            App.AskSageAuto("G = Graph('" + GraphCanvas.Graph.GetEdgeWeights().ToGraph6() + "')" + Environment.NewLine + "G.gomory_hu_tree().plot()");
         }
         internal void SageMinimumOutdegreeOrientation()
         {
@@ -823,7 +823,7 @@ namespace Test
         }
         internal void SageCanonicalLabel()
         {
-            App.AskSageAuto("G = Graph('" + GraphCanvas.Graph.GetEdgeWeights().ToGraph6() + "')" + Environment.NewLine + "G.canonical_label()");
+            App.AskSageAuto("G = Graph('" + GraphCanvas.Graph.GetEdgeWeights().ToGraph6() + "')" + Environment.NewLine + "G.canonical_label().plot()");
         }
         internal void SageIsCayley()
         {
