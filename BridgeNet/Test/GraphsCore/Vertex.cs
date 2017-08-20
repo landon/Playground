@@ -16,7 +16,7 @@ namespace Graphs
         static readonly GraphicsLayer.ARGB BoundaryPenColor = new GraphicsLayer.ARGB(0, 0, 0);
         static readonly GraphicsLayer.ARGB BoundarySelectedPenColor = new GraphicsLayer.ARGB(255, 0, 255, 0);
         static readonly int BoundarySelectedPenWidth = 2;
-        static readonly GraphicsLayer.ARGB DefaultFillBrushColor = new GraphicsLayer.ARGB(120, 0, 0, 0);
+        public static readonly GraphicsLayer.ARGB DefaultFillBrushColor = new GraphicsLayer.ARGB(120, 0, 0, 0);
         static readonly GraphicsLayer.ARGB UniversalVertexFillBrushColor = new GraphicsLayer.ARGB(120, 0, 0, 255);
         static readonly GraphicsLayer.ARGB SelectedFillBrushColor = new GraphicsLayer.ARGB(255, 0, 255, 127);
 

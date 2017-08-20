@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GraphsCore;
+using Algorithms;
 
 namespace Test
 {
@@ -16,6 +17,11 @@ namespace Test
         string _title;
         public HTMLCanvasElement Canvas { get; private set; }
         public GraphCanvas GraphCanvas { get; private set; }
+
+        static List<ARGB> Colors = new List<ARGB>() {
+            new ARGB(255, 0, 0), new ARGB(0, 0, 255), new ARGB(0, 255, 0),
+            new ARGB(255, 255, 0), new ARGB(95, 158, 160), new ARGB(139, 69, 19),
+            new ARGB(30, 144, 255), new ARGB(64, 224, 208), new ARGB(218, 112, 214) };
 
         public TabCanvas(HTMLCanvasElement canvas, GraphCanvas graphCanvas)
         {
@@ -68,9 +74,20 @@ namespace Test
         {
             App.AskSageAuto("G = Graph('" + GraphCanvas.Graph.GetEdgeWeights().ToGraph6() + "')" + Environment.NewLine + "G.chromatic_symmetric_function()");
         }
-        internal void SageColoring()
+        internal async void SageColoring()
         {
-            App.AskSageAuto("G = Graph('" + GraphCanvas.Graph.GetEdgeWeights().ToGraph6() + "')" + Environment.NewLine + "G.coloring()");
+            var coloring = await App.AskSageAsync(GraphCanvas.Graph, "G.coloring()");
+            var cc = coloring.Split(new[] { "]," }, StringSplitOptions.RemoveEmptyEntries).Select(s => s.Replace("[", "").Replace("]", "").Replace(" ", "").Replace(Environment.NewLine, "").Replace("\\n", "").Split(',').Select(x => int.Parse(x)).ToList()).ToList();
+
+            int i = 0;
+            foreach(var v in GraphCanvas.Graph.Vertices)
+            {
+                var c = cc.FirstIndex(l => l.Contains(i));
+                v.Color = Colors[c % Colors.Count];
+                i++;
+            }
+
+            Invalidate();
         }
         internal void SageConvexityProperties()
         {
@@ -80,9 +97,18 @@ namespace Test
         {
             App.AskSageAuto("G = Graph('" + GraphCanvas.Graph.GetEdgeWeights().ToGraph6() + "')" + Environment.NewLine + "G.has_homomorphism_to()");
         }
-        internal void SageIndependentSet()
+        internal async void SageIndependentSet()
         {
-            App.AskSageAuto("G = Graph('" + GraphCanvas.Graph.GetEdgeWeights().ToGraph6() + "')" + Environment.NewLine + "G.independent_set()");
+            var coloring = await App.AskSageAsync(GraphCanvas.Graph, "G.independent_set()");
+            var cc = coloring.Replace("[", "").Replace("]", "").Replace(" ", "").Replace(Environment.NewLine, "").Replace("\\n", "").Split(',').Select(x => int.Parse(x)).ToList();
+
+            foreach (var v in GraphCanvas.Graph.Vertices)
+                v.Color = Vertex.DefaultFillBrushColor;
+
+            foreach (var v in cc)
+                GraphCanvas.Graph.Vertices[v].Color = Colors[1];
+
+            Invalidate();
         }
         internal void SageIndependentSetOfRepresentatives()
         {
@@ -120,9 +146,18 @@ namespace Test
         {
             App.AskSageAuto("G = Graph('" + GraphCanvas.Graph.GetEdgeWeights().ToGraph6() + "')" + Environment.NewLine + "G.tutte_polynomial()");
         }
-        internal void SageVertexCover()
+        internal async void SageVertexCover()
         {
-            App.AskSageAuto("G = Graph('" + GraphCanvas.Graph.GetEdgeWeights().ToGraph6() + "')" + Environment.NewLine + "G.vertex_cover()");
+            var coloring = await App.AskSageAsync(GraphCanvas.Graph, "G.vertex_cover()");
+            var cc = coloring.Replace("[", "").Replace("]", "").Replace(" ", "").Replace(Environment.NewLine, "").Replace("\\n", "").Split(',').Select(x => int.Parse(x)).ToList();
+
+            foreach (var v in GraphCanvas.Graph.Vertices)
+                v.Color = Vertex.DefaultFillBrushColor;
+
+            foreach (var v in cc)
+                GraphCanvas.Graph.Vertices[v].Color = Colors[1];
+
+            Invalidate();
         }
         internal void SageBipartiteColor()
         {
@@ -164,9 +199,18 @@ namespace Test
         {
             App.AskSageAuto("G = Graph('" + GraphCanvas.Graph.GetEdgeWeights().ToGraph6() + "')" + Environment.NewLine + "G.clique_complex()");
         }
-        internal void SageCliqueMaximum()
+        internal async void SageCliqueMaximum()
         {
-            App.AskSageAuto("G = Graph('" + GraphCanvas.Graph.GetEdgeWeights().ToGraph6() + "')" + Environment.NewLine + "G.clique_maximum()");
+            var coloring = await App.AskSageAsync(GraphCanvas.Graph, "G.clique_maximum()");
+            var cc = coloring.Replace("[", "").Replace("]", "").Replace(" ", "").Replace(Environment.NewLine, "").Replace("\\n", "").Split(',').Select(x => int.Parse(x)).ToList();
+
+            foreach (var v in GraphCanvas.Graph.Vertices)
+                v.Color = Vertex.DefaultFillBrushColor;
+
+            foreach (var v in cc)
+                GraphCanvas.Graph.Vertices[v].Color = Colors[1];
+
+            Invalidate();
         }
         internal void SageCliqueNumber()
         {
@@ -228,9 +272,26 @@ namespace Test
         {
             App.AskSageAuto("G = Graph('" + GraphCanvas.Graph.GetEdgeWeights().ToGraph6() + "')" + Environment.NewLine + "G.orientations()");
         }
-        internal void SageRandomSpanningTree()
+        internal async void SageRandomSpanningTree()
         {
-            App.AskSageAuto("G = Graph('" + GraphCanvas.Graph.GetEdgeWeights().ToGraph6() + "')" + Environment.NewLine + "G.random_spanning_tree()");
+            var edges = await App.AskSageAsync(GraphCanvas.Graph, "G.random_spanning_tree()");
+            var ee = edges.Split(new[] { ")," }, StringSplitOptions.RemoveEmptyEntries).Select(s => s.Replace("[", "").Replace("]", "").Replace("(","").Replace(")", "").Replace(" ", "").Replace(Environment.NewLine, "").Replace("\\n", "").Replace("\\n","").Split(',').Select(x => int.Parse(x)).ToList()).ToList();
+
+            foreach (var v in GraphCanvas.Graph.Vertices)
+                v.Color = Vertex.DefaultFillBrushColor;
+
+            foreach(var e in GraphCanvas.Graph.Edges)
+                e.Color = new GraphicsLayer.ARGB(0, 0, 0);
+
+            foreach (var e in ee)
+            {
+                var v1 = GraphCanvas.Graph.Vertices[e[0]];
+                var v2 = GraphCanvas.Graph.Vertices[e[1]];
+
+                GraphCanvas.Graph.Edges.First(x => x.V1 == v1 && x.V2 == v2 || x.V1 == v2 && x.V2 == v1).Color = Colors[1];
+            }
+
+            Invalidate();
         }
         internal void SageSpanningTrees()
         {
@@ -240,9 +301,18 @@ namespace Test
         {
             App.AskSageAuto("G = Graph('" + GraphCanvas.Graph.GetEdgeWeights().ToGraph6() + "')" + Environment.NewLine + "G.strong_orientation()");
         }
-        internal void SageApexVertices()
+        internal async void SageApexVertices()
         {
-            App.AskSageAuto("G = Graph('" + GraphCanvas.Graph.GetEdgeWeights().ToGraph6() + "')" + Environment.NewLine + "G.apex_vertices()");
+            var coloring = await App.AskSageAsync(GraphCanvas.Graph, "G.apex_vertices()");
+            var cc = coloring.Replace("[", "").Replace("]", "").Replace(" ", "").Replace(Environment.NewLine, "").Replace("\\n", "").Split(',').Select(x => int.Parse(x)).ToList();
+
+            foreach (var v in GraphCanvas.Graph.Vertices)
+                v.Color = Vertex.DefaultFillBrushColor;
+
+            foreach (var v in cc)
+                GraphCanvas.Graph.Vertices[v].Color = Colors[1];
+
+            Invalidate();
         }
 
         internal void SageIsApex()
@@ -1296,7 +1366,7 @@ namespace Test
             }
         }
 
-        void OnGraphModified(Graph g)
+        void OnGraphModified(Graphs.Graph g)
         {
             Invalidate();
         }
