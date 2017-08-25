@@ -33,7 +33,15 @@ namespace Test
             Canvas.OnMouseDown += OnMouseButtonDown;
             Canvas.OnMouseUp += OnMouseButtonUp;
             Canvas.OnMouseMove += OnMouseMove;
-            
+
+            Canvas.OnTouchCancel += OnTouchCancel;
+            Canvas.OnTouchEnd += OnTouchEnd;
+            Canvas.OnTouchEnter += OnTouchEnter;
+            Canvas.OnTouchLeave += OnTouchLeave;
+            Canvas.OnTouchMove += OnTouchMove;
+            Canvas.OnTouchStart += OnTouchStart;
+
+
             Canvas.OnLoad = OnLoad;
 
             GraphCanvas.GraphModified += OnGraphModified;
@@ -44,6 +52,27 @@ namespace Test
         {
             Title = name;
         }
+
+        #region touch
+        void OnTouchCancel(TouchEvent<HTMLCanvasElement> e)
+        {
+        }
+        void OnTouchEnd(TouchEvent<HTMLCanvasElement> e)
+        {
+        }
+        void OnTouchEnter(TouchEvent<HTMLCanvasElement> e)
+        {
+        }
+        void OnTouchLeave(TouchEvent<HTMLCanvasElement> e)
+        {
+        }
+        void OnTouchMove(TouchEvent<HTMLCanvasElement> e)
+        {
+        }
+        void OnTouchStart(TouchEvent<HTMLCanvasElement> e)
+        {
+        }
+        #endregion
 
         #region Sage
         internal void SageManual()
