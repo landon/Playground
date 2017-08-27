@@ -11,20 +11,44 @@ namespace TouchTest
     {
         static HTMLCanvasElement _canvas; 
         static CanvasRenderingContext2D _context;
-        static Set<TouchHistory> _history = new Set<TouchHistory>(256);
+        static Set<TouchHistory> _history = new Set<TouchHistory>();
 
         public static void Main()
         {
             Window.OnLoad += OnLoad;
-            
+            Window.OnResize += OnResize;
+            Window.OnDeviceOrientation += OnDeviceOrientation;
+
             _canvas = Document.CreateElement<HTMLCanvasElement>("canvas");
-            _canvas.ClassName = "full";
 
             Document.Body.AppendChild(_canvas);
         }
 
+        static void OnDeviceOrientation(Event e)
+        {
+            GoFull();
+        }
+
+        static void OnResize(Event e)
+        {
+            GoFull();
+        }
+
+        static void GoFull()
+        {
+            _canvas.Width = Window.InnerWidth;
+            _canvas.Height = Window.InnerHeight;
+            Redraw();
+        }
+
         static void OnLoad(Event e)
         {
+            var el = _canvas.ToDynamic();
+            if (el.webkitRequestFullScreen)
+                el.webkitRequestFullScreen();
+            else
+                el.mozRequestFullScreen();
+
             _context = _canvas.GetContext("2d").As<CanvasRenderingContext2D>();
             _context.StrokeStyle = "#222222";
             AttachTouchEvents(_canvas);
@@ -43,7 +67,6 @@ namespace TouchTest
         static void OnTouchCancel(TouchEvent<HTMLCanvasElement> e)
         {
             e.PreventDefault();
-            Console.WriteLine("cancel");
             foreach (var t in e.ChangedTouches)
                 _history.Remove(t.Identifier);
 
@@ -81,15 +104,11 @@ namespace TouchTest
         static void OnTouchStart(TouchEvent<HTMLCanvasElement> e)
         {
             e.PreventDefault();
-            Console.WriteLine("touch");
             foreach (var t in e.ChangedTouches)
             {
-                if (!_history.Contains(t.Identifier))
-                {
-                    var th = new TouchHistory() { Id = t.Identifier };
-                    th.AddEvent(t);
-                    _history.Add(th);
-                }
+                var th = new TouchHistory() { Id = t.Identifier };
+                th.AddEvent(t);
+                _history.Add(th);
             }
 
             Redraw();
@@ -97,10 +116,11 @@ namespace TouchTest
 
         static void Redraw()
         {
-            System.Console.Write(_history.Count() + " ");
             _context.ClearRect(0, 0, _canvas.Width, _canvas.Height);
             foreach (var h in _history)
                 h.Draw(_context);
+
+            
         }
     }
 }

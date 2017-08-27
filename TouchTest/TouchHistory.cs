@@ -50,10 +50,20 @@ namespace TouchTest
         {
             if (_events.Count > 1)
             {
-                context.MoveTo(_events[0].ClientX, _events[0].ClientY);
-                foreach(var e in _events.Skip(1))
+                context.StrokeStyle = "#00FF00";
+                context.BeginPath();
+                var first = true;
+                foreach (var b in _events)
                 {
-                    context.LineTo(e.ClientX, e.ClientY);
+                    if (first)
+                    {
+                        context.MoveTo(b.PageX, b.PageY);
+                        first = false;
+                    }
+                    else
+                    {
+                        context.LineTo(b.PageX, b.PageY);
+                    }
                 }
                 context.Stroke();
             }
