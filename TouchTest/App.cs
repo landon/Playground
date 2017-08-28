@@ -43,12 +43,6 @@ namespace TouchTest
 
         static void OnLoad(Event e)
         {
-            var el = _canvas.ToDynamic();
-            if (el.webkitRequestFullScreen)
-                el.webkitRequestFullScreen();
-            else
-                el.mozRequestFullScreen();
-
             _context = _canvas.GetContext("2d").As<CanvasRenderingContext2D>();
             _context.StrokeStyle = "#222222";
             AttachTouchEvents(_canvas);

@@ -24,6 +24,25 @@ namespace Test
         public static void Main()
         {
             Window.OnLoad += OnWindowLoad;
+            Window.OnResize += OnResize;
+            Window.OnDeviceOrientation += OnDeviceOrientation;
+        }
+
+        static void OnDeviceOrientation(Event e)
+        {
+            OnLayoutChange();
+        }
+
+        static void OnResize(Event e)
+        {
+            OnLayoutChange();
+        }
+
+        static void OnLayoutChange()
+        {
+            var tc = CurrentTabCanvas;
+            if (tc != null)
+                tc.OnLayoutChange();
         }
 
         static void OnWindowLoad(Event eee)

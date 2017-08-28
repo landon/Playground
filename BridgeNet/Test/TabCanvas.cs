@@ -41,11 +41,17 @@ namespace Test
             Canvas.OnTouchMove += OnTouchMove;
             Canvas.OnTouchStart += OnTouchStart;
 
-
             Canvas.OnLoad = OnLoad;
 
             GraphCanvas.GraphModified += OnGraphModified;
             GraphCanvas.NameModified += OnNameModified;
+        }
+
+        public void OnLayoutChange()
+        {
+            Canvas.Width = Window.InnerWidth;
+            Canvas.Height = Window.InnerHeight;
+            Invalidate();
         }
 
         void OnNameModified(string name)
@@ -59,6 +65,8 @@ namespace Test
         }
         void OnTouchEnd(TouchEvent<HTMLCanvasElement> e)
         {
+            if (MouseButtonUp != null)
+                MouseButtonUp(e.LayerX, e.LayerY, MouseButton.Left);
         }
         void OnTouchEnter(TouchEvent<HTMLCanvasElement> e)
         {
@@ -68,9 +76,13 @@ namespace Test
         }
         void OnTouchMove(TouchEvent<HTMLCanvasElement> e)
         {
+            if (MouseMoved != null)
+                MouseMoved(e.LayerX, e.LayerY);
         }
         void OnTouchStart(TouchEvent<HTMLCanvasElement> e)
         {
+            if (MouseButtonDown != null)
+                MouseButtonDown(e.LayerX, e.LayerY, MouseButton.Left);
         }
         #endregion
 
