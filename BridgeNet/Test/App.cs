@@ -275,7 +275,7 @@ namespace Test
             _tabID++;
         }
 
-        public static TabCanvas CurrentTabCanvas { get { return _canvasLookup[_currentTabCanvas]; } }
+        public static TabCanvas CurrentTabCanvas { get { return _currentTabCanvas == null ? _canvasLookup[_currentTabCanvas] : null; } }
 
         static void OnKeyDown(KeyboardEvent e)
         {
