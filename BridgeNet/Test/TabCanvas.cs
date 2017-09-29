@@ -1358,7 +1358,7 @@ namespace Test
         }
         #endregion
 
-        internal async void SageLoadNamedGraph(string name)
+        static internal async void SageLoadNamedGraph(string name)
         {
             var a = await App.AskSageAsync("G = graphs." + name + "()" + Environment.NewLine + "G.adjacency_matrix().str()");
             var layout = await App.AskSageAsync("G = graphs." + name + "()" + Environment.NewLine + "G.layout()");
@@ -1371,7 +1371,7 @@ namespace Test
         }
         #endregion
 
-        List<Vector> Scale(IEnumerable<Vector> positions)
+        static List<Vector> Scale(IEnumerable<Vector> positions)
         {
             var l = positions.ToList();
             var minX = l.Min(p => p.X);

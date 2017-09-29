@@ -179,7 +179,7 @@ namespace Test
 
             jQuery.Select(".NamedGraph").On("click", (Action<Event>)((Event ee) =>
             {
-                CurrentTabCanvas.SageLoadNamedGraph(((HTMLElement)ee.CurrentTarget).TextContent);
+                TabCanvas.SageLoadNamedGraph(((HTMLElement)ee.CurrentTarget).TextContent);
             }));
             #endregion
 
@@ -275,7 +275,8 @@ namespace Test
             _tabID++;
         }
 
-        public static TabCanvas CurrentTabCanvas { get { return _currentTabCanvas == null ? _canvasLookup[_currentTabCanvas] : null; } }
+        public static TabCanvas CurrentTabCanvas { get
+            { return _currentTabCanvas == null ? _canvasLookup[_currentTabCanvas] : null; } }
 
         static void OnKeyDown(KeyboardEvent e)
         {
