@@ -195,7 +195,7 @@ namespace Test
                 {
                     var d = jQuery.This.ToDynamic();
                     _currentTabCanvas = ee.Target.As<HTMLAnchorElement>().Href;
-                    var canvas = CurrentTabCanvas.Canvas;
+                    var canvas = _canvasLookup[_currentTabCanvas].Canvas;
                     d.tab("show");
                 }
             }));
@@ -275,8 +275,7 @@ namespace Test
             _tabID++;
         }
 
-        public static TabCanvas CurrentTabCanvas { get
-            { return _currentTabCanvas == null ? _canvasLookup[_currentTabCanvas] : null; } }
+        public static TabCanvas CurrentTabCanvas { get { return _canvasLookup[_currentTabCanvas]; } }
 
         static void OnKeyDown(KeyboardEvent e)
         {
