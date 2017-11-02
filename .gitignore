@@ -182,3 +182,7 @@ UpgradeLog*.htm
 
 # Microsoft Fakes
 FakesAssemblies/
+*.lock
+TriangleTiling/.vs/TriangleTiling/v15/Server/sqlite3/storage.ide
+TriangleTiling/.vs/TriangleTiling/v15/Server/sqlite3/storage.ide-shm
+TriangleTiling/.vs/TriangleTiling/v15/Server/sqlite3/storage.ide-wal
