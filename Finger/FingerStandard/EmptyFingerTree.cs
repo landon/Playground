@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace FingerStandard
 {
-    public partial class EmptyFingerTree<T, M> : FingerTree<T, M> where T : IMeasured<M>
+    public class EmptyFingerTree<T, M> : FingerTree<T, M> where T : IMeasured<M>
     {
         Monoid<M> _m;
 
