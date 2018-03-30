@@ -2,8 +2,8 @@
 {
     public class Pair<T, V>
     {
-        public readonly T Left;
-        public readonly V Right;
+        public T Left;
+        public V Right;
 
         public Pair(T left, V right)
         {

@@ -2,9 +2,9 @@
 {
     public class Split<U, T, V> where U : ISplittable<T, V> where T : IMeasured<V>
     {
-        public readonly U Left;
+        public U Left;
         public readonly T SplitItem;
-        public readonly U Right;
+        public U Right;
 
         public Split(U left, T splitItem, U right)
         { 
