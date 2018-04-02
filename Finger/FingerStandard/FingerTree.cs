@@ -158,7 +158,7 @@ namespace FingerStandard
             {
                 int cnt = digitNodes.Count;
                 if (cnt == 0)
-                    throw new Exception("Error: Split of an empty Digit attempted!");
+                    throw new Exception("oops");
 
                 var headItem = digitNodes[0];
                 if (cnt == 1)

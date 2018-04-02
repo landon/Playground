@@ -43,7 +43,7 @@ namespace FingerStandard.Collections
         public override FingerTree<WeightedElement<T>, double> Merge(FingerTree<WeightedElement<T>, double> f)
         {
             if (!(f is PriorityQueue<T>))
-                throw new Exception("Error: PriQue merge with non-PriQue attempted!");
+                throw new Exception("oops");
   
             return new PriorityQueue<T>(_finger.Merge(((PriorityQueue<T>)f)._finger));
         }

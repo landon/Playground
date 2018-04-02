@@ -29,7 +29,7 @@ namespace FingerStandard
             }
             else
             {
-                throw new Exception("The DeepFingerTree() constructor was passed an empty front digits deal.");
+                throw new Exception("oops");
             }
         }
 
