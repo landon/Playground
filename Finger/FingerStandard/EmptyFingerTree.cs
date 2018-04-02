@@ -30,8 +30,8 @@ namespace FingerStandard
             return f;
         }
 
-        public override FingerTree<T, M> Merge(FingerTree<T, M> rightFT) => rightFT;
-        public override Split<FingerTree<T, M>, T, M> Split(Func<M, bool> predicate, M acc) => throw new Exception("oops");
-        public override Pair<FingerTree<T, M>, FingerTree<T, M>> Split(Func<M, bool> predicate) => new Pair<FingerTree<T, M>, FingerTree<T, M>>(new EmptyFingerTree<T, M>(_m), new EmptyFingerTree<T, M>(_m));
+        public override FingerTree<T, M> Merge(FingerTree<T, M> f) => f;
+        public override Split<FingerTree<T, M>, T, M> Split(Func<M, bool> p, M a) => throw new Exception("oops");
+        public override Pair<FingerTree<T, M>, FingerTree<T, M>> Split(Func<M, bool> p) => new Pair<FingerTree<T, M>, FingerTree<T, M>>(new EmptyFingerTree<T, M>(_m), new EmptyFingerTree<T, M>(_m));
     }
 }

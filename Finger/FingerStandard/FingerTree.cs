@@ -38,20 +38,20 @@ namespace FingerStandard
             return r;
         }
 
-        public static FingerTree<T, M> Create(List<T> frontList, FingerTree<Node<T, M>, M> innerFT, Digit<T, M> backDig)
+        public static FingerTree<T, M> Create(List<T> left, FingerTree<Node<T, M>, M> f, Digit<T, M> right)
         {
-            var m = backDig.M;
+            var m = right.M;
 
-            if (frontList.Count > 0)
-                return new DeepFingerTree<T, M>(m, new Digit<T, M>(m, frontList), innerFT, backDig);
+            if (left.Count > 0)
+                return new DeepFingerTree<T, M>(m, new Digit<T, M>(m, left), f, right);
 
-            if (innerFT is EmptyFingerTree<Node<T, M>, M>)
-                return FromSequence(backDig.digitNodes, m);
+            if (f is EmptyFingerTree<Node<T, M>, M>)
+                return FromSequence(right.Digits, m);
 
-            var innerLeft = innerFT.LeftView();
-            var newlstFront = innerLeft.End.Nodes;
+            var il = f.LeftView();
+            var n = il.End.Nodes;
 
-            return new DeepFingerTree<T, M>(m, new Digit<T, M>(m, newlstFront), innerLeft.Rest, backDig);
+            return new DeepFingerTree<T, M>(m, new Digit<T, M>(m, n), il.Rest, right);
         }
 
         public virtual FingerTree<T, M> Reverse()
@@ -59,126 +59,121 @@ namespace FingerStandard
             return this;
         }
 
-        public static Digit<T, M> ReverseDigit(Digit<T, M> theDigit)
+        public static Digit<T, M> ReverseDigit(Digit<T, M> d)
         {
-            var newDigitList = new List<T>(theDigit.digitNodes);
-            newDigitList.Reverse();
+            var l = new List<T>(d.Digits);
+            l.Reverse();
 
-            return new Digit<T, M>(theDigit.M, newDigitList);
+            return new Digit<T, M>(d.M, l);
         }
 
-        public static FingerTree<T, M> CreateR(Digit<T, M> frontDig, FingerTree<Node<T, M>, M> innerFT, List<T> backList)
+        public static FingerTree<T, M> CreateR(Digit<T, M> left, FingerTree<Node<T, M>, M> f, List<T> right)
         {
-            var m = frontDig.M;
+            var m = left.M;
 
-            if (backList.Count > 0)
-                return new DeepFingerTree<T, M>(m, frontDig, innerFT, new Digit<T, M>(m, backList));
+            if (right.Count > 0)
+                return new DeepFingerTree<T, M>(m, left, f, new Digit<T, M>(m, right));
 
-            if (innerFT is EmptyFingerTree<Node<T, M>, M>)
-                return FromSequence(frontDig.digitNodes, m);
+            if (f is EmptyFingerTree<Node<T, M>, M>)
+                return FromSequence(left.Digits, m);
 
-            var innerRight = innerFT.RightView();
-            var newlstBack = innerRight.End.Nodes;
+            var ir = f.RightView();
+            var n = ir.End.Nodes;
 
-            return new DeepFingerTree<T, M>(m, frontDig, innerRight.Rest, new Digit<T, M>(m, newlstBack));
+            return new DeepFingerTree<T, M>(m, left, ir.Rest, new Digit<T, M>(m, n));
         }
 
         public static List<Node<T, M>> ListOfNodes(Monoid<M> m, List<T> tt)
         {
-            var resultNodeList = new List<Node<T, M>>();
-            Node<T, M> nextNode = null;
+            var list = new List<Node<T, M>>();
+            Node<T, M> next = null;
 
             if (tt.Count < 4)
             {
-                nextNode = new Node<T, M>(m, tt);
-                resultNodeList.Add(nextNode);
-                return resultNodeList;
+                next = new Node<T, M>(m, tt);
+                list.Add(next);
+                return list;
             }
 
-            var nextTList = new List<T>(tt.GetRange(0, 3));
-            nextNode = new Node<T, M>(m, nextTList);
-            resultNodeList.Add(nextNode);
-            resultNodeList.AddRange(ListOfNodes(m, tt.GetRange(3, tt.Count - 3)));
-            return resultNodeList;
+            next = new Node<T, M>(m, new List<T>(tt.GetRange(0, 3)));
+            list.Add(next);
+            list.AddRange(ListOfNodes(m, tt.GetRange(3, tt.Count - 3)));
+            return list;
         }
 
         public class Digit<U, V> : ISplittable<U, V> where U : IMeasured<V>
         {
-            public Monoid<V> M;
-            public List<U> digitNodes = new List<U>();
+            public readonly Monoid<V> M;
+            public readonly List<U> Digits = new List<U>();
 
             public Digit(Monoid<V> m, U u1)
             {
                 M = m;
-                digitNodes.Add(u1);
+                Digits.Add(u1);
             }
 
             public Digit(Monoid<V> m, U u1, U u2)
             {
                 M = m;
-
-                digitNodes.Add(u1);
-                digitNodes.Add(u2);
+                Digits.Add(u1);
+                Digits.Add(u2);
             }
             public Digit(Monoid<V> m, U u1, U u2, U u3)
             {
                 M = m;
-
-                digitNodes.Add(u1);
-                digitNodes.Add(u2);
-                digitNodes.Add(u3);
+                Digits.Add(u1);
+                Digits.Add(u2);
+                Digits.Add(u3);
             }
             public Digit(Monoid<V> m, U u1, U u2, U u3, U u4)
             {
                 M = m;
-
-                digitNodes.Add(u1);
-                digitNodes.Add(u2);
-                digitNodes.Add(u3);
-                digitNodes.Add(u4);
+                Digits.Add(u1);
+                Digits.Add(u2);
+                Digits.Add(u3);
+                Digits.Add(u4);
             }
 
-            public Digit(Monoid<V> m, List<U> listU)
+            public Digit(Monoid<V> m, List<U> uu)
             {
                 M = m;
-                digitNodes = listU;
+                Digits = uu;
             }
 
             public V Measure()
             {
                 var result = M.Zero;
 
-                foreach (U u in digitNodes)
+                foreach (U u in Digits)
                     result = M.BinaryOperator(result, u.Measure());
 
                 return result;
             }
 
-            public Split<Digit<U, V>, U, V> Split(Func<V, bool> predicate, V acc)
+            public Split<Digit<U, V>, U, V> Split(Func<V, bool> p, V v)
             {
-                int cnt = digitNodes.Count;
-                if (cnt == 0)
+                int c = Digits.Count;
+                if (c == 0)
                     throw new Exception("oops");
 
-                var headItem = digitNodes[0];
-                if (cnt == 1)
+                var headItem = Digits[0];
+                if (c == 1)
                     return new Split<Digit<U, V>, U, V>(new Digit<U, V>(M, new List<U>()), headItem, new Digit<U, V>(M, new List<U>()));
 
-                List<U> digNodesTail = new List<U>(digitNodes.GetRange(1, cnt - 1));
-                Digit<U, V> digitTail = new Digit<U, V>(M, digNodesTail);
+                var rest = new Digit<U, V>(M, new List<U>(Digits.GetRange(1, c - 1)));
 
-                var acc1 = M.BinaryOperator(acc, headItem.Measure());
-                if (predicate(acc1))
-                    return new Split<Digit<U, V>, U, V>(new Digit<U, V>(M, new List<U>()), headItem, digitTail);
+                var a = M.BinaryOperator(v, headItem.Measure());
+                if (p(a))
+                    return new Split<Digit<U, V>, U, V>(new Digit<U, V>(M, new List<U>()), headItem, rest);
 
-                var tailSplit = digitTail.Split(predicate, acc1);
-                tailSplit.Left.digitNodes.Insert(0, headItem);
-                return tailSplit;
+                var split = rest.Split(p, a);
+                split.Left.Digits.Insert(0, headItem);
+                return split;
             }
 
             public IEnumerable<U> ToSequenceLeft()
             {
-                return digitNodes;
+                return Digits;
             }
         }
 
@@ -205,7 +200,7 @@ namespace FingerStandard
                 Nodes.Add(u3);
 
                 PreCalcMeasure = ConcreteMonoid.Zero;
-                foreach (U u in Nodes)
+                foreach (var u in Nodes)
                     PreCalcMeasure = ConcreteMonoid.BinaryOperator(PreCalcMeasure, u.Measure());
             }
 
@@ -215,7 +210,7 @@ namespace FingerStandard
                 Nodes = uu;
 
                 PreCalcMeasure = ConcreteMonoid.Zero;
-                foreach (U u in Nodes)
+                foreach (var u in Nodes)
                     PreCalcMeasure = ConcreteMonoid.BinaryOperator(PreCalcMeasure, u.Measure());
             }
 

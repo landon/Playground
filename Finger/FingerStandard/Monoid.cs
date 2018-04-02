@@ -7,10 +7,10 @@ namespace FingerStandard
         public readonly T Zero;
         public readonly Func<T, T, T> BinaryOperator;
 
-        public Monoid(T zero, Func<T, T, T> binaryOperator)
+        public Monoid(T zero, Func<T, T, T> bo)
         {
             Zero = zero;
-            BinaryOperator = binaryOperator;
+            BinaryOperator = bo;
         }
     }
 }

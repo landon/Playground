@@ -14,7 +14,7 @@ namespace FingerStandard
 
         public DeepFingerTree(Monoid<M> m, Digit<T, M> f, FingerTree<Node<T, M>, M> ft, Digit<T, M> b)
         {
-            if (f.digitNodes.Count > 0)
+            if (f.Digits.Count > 0)
             {
                 _m = m;
 
@@ -42,61 +42,59 @@ namespace FingerStandard
 
         public override FingerTree<T, M> Reverse()
         {
-            var newFrontDig = ReverseDigit(_rightDigits);
-            var newBackDig = ReverseDigit(_leftDigits);
+            var fl = ReverseDigit(_rightDigits);
+            var fr = ReverseDigit(_leftDigits);
 
             if (_fingerTree is EmptyFingerTree<Node<T, M>, M>)
-                return new DeepFingerTree<T, M>(_m, newFrontDig, _fingerTree, newBackDig);
+                return new DeepFingerTree<T, M>(_m, fl, _fingerTree, fr);
 
             if (_fingerTree is SingleFingerTree<Node<T, M>, M>)
-            {
-                return new DeepFingerTree<T, M>(_m, newFrontDig, new SingleFingerTree<Node<T, M>, M>(_m, ReverseNode(_fingerTree.LeftView().End)), newBackDig);
-            }
+                return new DeepFingerTree<T, M>(_m, fl, new SingleFingerTree<Node<T, M>, M>(_m, ReverseNode(_fingerTree.LeftView().End)), fr);
 
-            var revDeepInner = (DeepFingerTree<Node<T, M>, M>)(((DeepFingerTree<Node<T, M>, M>)_fingerTree).Reverse());
-            var newFrontNodes = new List<Node<T, M>>();
-            var newBackNodes = new List<Node<T, M>>();
+            var rdi = (DeepFingerTree<Node<T, M>, M>)(((DeepFingerTree<Node<T, M>, M>)_fingerTree).Reverse());
+            var ln = new List<Node<T, M>>();
+            var rn = new List<Node<T, M>>();
 
-            foreach (var node in revDeepInner._leftDigits.digitNodes)
-                newFrontNodes.Add(ReverseNode(node));
+            foreach (var n in rdi._leftDigits.Digits)
+                ln.Add(ReverseNode(n));
 
-            foreach (var node in revDeepInner._rightDigits.digitNodes)
-                newBackNodes.Add(ReverseNode(node));
+            foreach (var n in rdi._rightDigits.Digits)
+                rn.Add(ReverseNode(n));
 
-            var reversedInner = new DeepFingerTree<Node<T, M>, M>(_m, new DeepFingerTree<Node<T, M>, M>.Digit<Node<T, M>, M>(_m, newFrontNodes), revDeepInner._fingerTree, new DeepFingerTree<Node<T, M>, M>.Digit<Node<T, M>, M>(_m, newBackNodes));
-            return new DeepFingerTree<T, M>(_m, ReverseDigit(_rightDigits), reversedInner, ReverseDigit(_leftDigits));
+            var ri = new DeepFingerTree<Node<T, M>, M>(_m, new DeepFingerTree<Node<T, M>, M>.Digit<Node<T, M>, M>(_m, ln), rdi._fingerTree, new DeepFingerTree<Node<T, M>, M>.Digit<Node<T, M>, M>(_m, rn));
+            return new DeepFingerTree<T, M>(_m, ReverseDigit(_rightDigits), ri, ReverseDigit(_leftDigits));
         }
 
-        public override View<T, M> LeftView() => new View<T, M>(_leftDigits.digitNodes[0], Create(_leftDigits.digitNodes.Skip(1).ToList(), _fingerTree, _rightDigits));
-        public override View<T, M> RightView() => new View<T, M>(_rightDigits.digitNodes[_rightDigits.digitNodes.Count - 1], CreateR(_leftDigits, _fingerTree, _rightDigits.digitNodes.Take(_rightDigits.digitNodes.Count - 1).ToList()));
+        public override View<T, M> LeftView() => new View<T, M>(_leftDigits.Digits[0], Create(_leftDigits.Digits.Skip(1).ToList(), _fingerTree, _rightDigits));
+        public override View<T, M> RightView() => new View<T, M>(_rightDigits.Digits[_rightDigits.Digits.Count - 1], CreateR(_leftDigits, _fingerTree, _rightDigits.Digits.Take(_rightDigits.Digits.Count - 1).ToList()));
 
         public override FingerTree<T, M> PushLeft(T t)
         {
-            if (_leftDigits.digitNodes.Count == 4)
+            if (_leftDigits.Digits.Count == 4)
             {
-                return new DeepFingerTree<T, M>(_m, new Digit<T, M>(_m, t, _leftDigits.digitNodes[0]), _fingerTree.PushLeft(new Node<T, M>(_m, _leftDigits.digitNodes.Skip(1).ToList())), _rightDigits);
+                return new DeepFingerTree<T, M>(_m, new Digit<T, M>(_m, t, _leftDigits.Digits[0]), _fingerTree.PushLeft(new Node<T, M>(_m, _leftDigits.Digits.Skip(1).ToList())), _rightDigits);
             }
             else
             {
-                var newLeft = new List<T>(_leftDigits.digitNodes);
-                newLeft.Insert(0, t);
+                var nl = new List<T>(_leftDigits.Digits);
+                nl.Insert(0, t);
 
-                return new DeepFingerTree<T, M>(_m, new Digit<T, M>(_m, newLeft), _fingerTree, _rightDigits);
+                return new DeepFingerTree<T, M>(_m, new Digit<T, M>(_m, nl), _fingerTree, _rightDigits);
             }
         }
 
         public override FingerTree<T, M> PushRight(T t)
         {
-            if (_rightDigits.digitNodes.Count == 4)
+            if (_rightDigits.Digits.Count == 4)
             {
-                return new DeepFingerTree<T, M>(_m, _leftDigits, _fingerTree.PushRight(new Node<T, M>(_m, _rightDigits.digitNodes.Take(3).ToList())), new Digit<T, M>(_m, _rightDigits.digitNodes[3], t));
+                return new DeepFingerTree<T, M>(_m, _leftDigits, _fingerTree.PushRight(new Node<T, M>(_m, _rightDigits.Digits.Take(3).ToList())), new Digit<T, M>(_m, _rightDigits.Digits[3], t));
             }
             else
             {
-                var newRight = new List<T>(_rightDigits.digitNodes);
-                newRight.Add(t);
+                var nr = new List<T>(_rightDigits.Digits);
+                nr.Add(t);
 
-                return new DeepFingerTree<T, M>(_m, _leftDigits, _fingerTree, new Digit<T, M>(_m, newRight));
+                return new DeepFingerTree<T, M>(_m, _leftDigits, _fingerTree, new Digit<T, M>(_m, nr));
             }
         }
 
@@ -104,7 +102,7 @@ namespace FingerStandard
         {
             var view = LeftView();
             yield return view.End;
-            foreach (T t in view.Rest.ToSequenceLeft())
+            foreach (var t in view.Rest.ToSequenceLeft())
                 yield return t;
         }
 
@@ -112,7 +110,7 @@ namespace FingerStandard
         {
             var view = RightView();
             yield return view.End;
-            foreach (T t in view.Rest.ToSequenceRight())
+            foreach (var t in view.Rest.ToSequenceRight())
                 yield return t;
         }
 
@@ -122,7 +120,7 @@ namespace FingerStandard
             {
                 FingerTree<T, M> resultFT = this;
 
-                foreach (T t in ts)
+                foreach (var t in ts)
                 {
                     resultFT = resultFT.PushRight(t);
                 }
@@ -133,7 +131,7 @@ namespace FingerStandard
             {
                 FingerTree<T, M> resultFT = this;
 
-                foreach (T t in ts)
+                foreach (var t in ts)
                 {
                     resultFT = resultFT.PushRight(t);
                 }
@@ -142,20 +140,20 @@ namespace FingerStandard
             }
             else
             {
-                var deepRight = f as DeepFingerTree<T, M>;
+                var dr = f as DeepFingerTree<T, M>;
 
-                var ll = new List<T>(_rightDigits.digitNodes);
+                var ll = new List<T>(_rightDigits.Digits);
                 ll.AddRange(ts);
-                ll.AddRange(deepRight._leftDigits.digitNodes);
+                ll.AddRange(dr._leftDigits.Digits);
 
-                return new DeepFingerTree<T, M>(_m, _leftDigits, _fingerTree.App2(ListOfNodes(_m, ll), deepRight._fingerTree), deepRight._rightDigits);
+                return new DeepFingerTree<T, M>(_m, _leftDigits, _fingerTree.App2(ListOfNodes(_m, ll), dr._fingerTree), dr._rightDigits);
             }
         }
 
 
-        public override FingerTree<T, M> Merge(FingerTree<T, M> rightFT)
+        public override FingerTree<T, M> Merge(FingerTree<T, M> f)
         {
-            return App2(new List<T>(), rightFT);
+            return App2(new List<T>(), f);
         }
 
         public override Split<FingerTree<T, M>, T, M> Split(Func<M, bool> p, M a)
@@ -164,27 +162,27 @@ namespace FingerStandard
 
             if (p(fdm))
             {
-                var frontSplit = _leftDigits.Split(p, a);
-                return new Split<FingerTree<T, M>, T, M>(FromSequence(frontSplit.Left.digitNodes, _m), frontSplit.SplitItem, Create(frontSplit.Right.digitNodes, _fingerTree, _rightDigits));
+                var lsplit = _leftDigits.Split(p, a);
+                return new Split<FingerTree<T, M>, T, M>(FromSequence(lsplit.Left.Digits, _m), lsplit.SplitItem, Create(lsplit.Right.Digits, _fingerTree, _rightDigits));
             }
 
             var ftm = _m.BinaryOperator(fdm, _fingerTree.Measure());
 
             if (p(ftm))
             {
-                var midSplit = _fingerTree.Split(p, fdm);
-                var midLeft = midSplit.Left;
-                var midItem = midSplit.SplitItem;
-                var splitMidLeft = (new Digit<T, M>(_m, midItem.Nodes)).Split(p, _m.BinaryOperator(fdm, midLeft.Measure()));
-                var finalsplitItem = splitMidLeft.SplitItem;
-                var finalLeftTree = CreateR(_leftDigits, midLeft, splitMidLeft.Left.digitNodes);
-                var finalRightTree = Create(splitMidLeft.Right.digitNodes, midSplit.Right, _rightDigits);
+                var ms = _fingerTree.Split(p, fdm);
+                var ml = ms.Left;
+                var mi = ms.SplitItem;
+                var sml = (new Digit<T, M>(_m, mi.Nodes)).Split(p, _m.BinaryOperator(fdm, ml.Measure()));
+                var fi = sml.SplitItem;
+                var flt = CreateR(_leftDigits, ml, sml.Left.Digits);
+                var frt = Create(sml.Right.Digits, ms.Right, _rightDigits);
 
-                return new Split<FingerTree<T, M>, T, M>(finalLeftTree, finalsplitItem, finalRightTree);
+                return new Split<FingerTree<T, M>, T, M>(flt, fi, frt);
             }
 
-            var backSplit = _rightDigits.Split(p, ftm);
-            return new Split<FingerTree<T, M>, T, M>(CreateR(_leftDigits, _fingerTree, backSplit.Left.digitNodes), backSplit.SplitItem, FromSequence(backSplit.Right.digitNodes, _m));
+            var rsplit = _rightDigits.Split(p, ftm);
+            return new Split<FingerTree<T, M>, T, M>(CreateR(_leftDigits, _fingerTree, rsplit.Left.Digits), rsplit.SplitItem, FromSequence(rsplit.Right.Digits, _m));
         }
 
         public override Pair<FingerTree<T, M>, FingerTree<T, M>> Split(Func<M, bool> p)

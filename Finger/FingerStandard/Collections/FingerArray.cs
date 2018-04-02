@@ -47,9 +47,9 @@ namespace FingerStandard.Collections
         public override FingerTree<SizedElement<T>, int> Reverse() => new FingerArray<T>(_finger.Reverse());
         public override FingerTree<SizedElement<T>, int> Merge(FingerTree<SizedElement<T>, int> f) => _finger.Merge(f);
 
-        public override Split<FingerTree<SizedElement<T>, int>, SizedElement<T>, int> Split(Func<int, bool> predicate, int a)
+        public override Split<FingerTree<SizedElement<T>, int>, SizedElement<T>, int> Split(Func<int, bool> p, int a)
         {
-            var split = _finger.Split(predicate, a);
+            var split = _finger.Split(p, a);
 
             split.Left = new FingerArray<T>(split.Left);
             split.Right = new FingerArray<T>(split.Right);
@@ -57,9 +57,9 @@ namespace FingerStandard.Collections
             return split;
         }
 
-        public override Pair<FingerTree<SizedElement<T>, int>, FingerTree<SizedElement<T>, int>> Split(Func<int, bool> predicate)
+        public override Pair<FingerTree<SizedElement<T>, int>, FingerTree<SizedElement<T>, int>> Split(Func<int, bool> p)
         {
-            var split = _finger.Split(predicate);
+            var split = _finger.Split(p);
 
             split.Left = new FingerArray<T>(split.Left);
             split.Right = new FingerArray<T>(split.Right);

@@ -14,15 +14,15 @@ namespace FingerStandard.Collections
                 _finger = _finger.PushRight(new WeightedElement<T>(t));
         }
 
-        public PriorityQueue(FingerTree<WeightedElement<T>, double> elemTree)
+        public PriorityQueue(FingerTree<WeightedElement<T>, double> f)
         {
-            _finger = elemTree;
+            _finger = f;
         }
 
         public override Monoid<double> ConcreteMonoid => _finger.ConcreteMonoid;
         public override double Measure() => _finger.Measure();
-        public override FingerTree<WeightedElement<T>, double> PushLeft(WeightedElement<T> elemT) => new PriorityQueue<T>(_finger.PushLeft(elemT));
-        public override FingerTree<WeightedElement<T>, double> PushRight(WeightedElement<T> elemT) => new PriorityQueue<T>(_finger.PushRight(elemT));
+        public override FingerTree<WeightedElement<T>, double> PushLeft(WeightedElement<T> t) => new PriorityQueue<T>(_finger.PushLeft(t));
+        public override FingerTree<WeightedElement<T>, double> PushRight(WeightedElement<T> t) => new PriorityQueue<T>(_finger.PushRight(t));
         public override IEnumerable<WeightedElement<T>> ToSequenceLeft() => _finger.ToSequenceLeft();
         public override IEnumerable<WeightedElement<T>> ToSequenceRight() => _finger.ToSequenceRight();
 
