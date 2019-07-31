@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29025.244
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hal", "Hal.csproj", "{33505C8C-1778-4EF6-A0AE-98A77BC904AB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{33505C8C-1778-4EF6-A0AE-98A77BC904AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{33505C8C-1778-4EF6-A0AE-98A77BC904AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{33505C8C-1778-4EF6-A0AE-98A77BC904AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{33505C8C-1778-4EF6-A0AE-98A77BC904AB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D73123CF-358B-432F-9183-16CD6E67465E}
+	EndGlobalSection
+EndGlobal
