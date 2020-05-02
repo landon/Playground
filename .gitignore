@@ -186,3 +186,15 @@ FakesAssemblies/
 TriangleTiling/.vs/TriangleTiling/v15/Server/sqlite3/storage.ide
 TriangleTiling/.vs/TriangleTiling/v15/Server/sqlite3/storage.ide-shm
 TriangleTiling/.vs/TriangleTiling/v15/Server/sqlite3/storage.ide-wal
+
+*.pyc
+
+*.ide-wal
+
+*.ide-shm
+
+*.ide
+
+Hal/\.vs/Hal/v16/Server/sqlite3/
+
+Hal/\.vs/Hal/DesignTimeBuild/

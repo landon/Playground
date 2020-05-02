@@ -13,7 +13,9 @@ def _play_internal(vf):
     if N == 1 and vf[0][0] == 24:
         yield vf[0][1]
     for i in range(N):
-        for j in range(i + 1, N):
+        for j in range(N):
+            if i == j:
+                continue
             for op in operators:
                 symbol = op[0]
                 func = op[1]
@@ -26,5 +28,5 @@ def _play_internal(vf):
                     for winner in _play_internal(wf):
                         yield winner
 
-for winner in play([4, 7, 8, 8]):
+for winner in set(play([1,3,4,6])):
     print(winner)
